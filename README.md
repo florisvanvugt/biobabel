@@ -13,7 +13,7 @@ In Python:
 
 ```
 import biobabel
-dat = biobabel.load()
+dat = biobabel.load('filename.hdf5')
 dat.print()
 ```
 
@@ -31,6 +31,13 @@ Install locally:
 ```
 pip install .
 ```
+
+and editable:
+
+```
+pip install -e .
+```
+
 
 
 Create wheels with:
