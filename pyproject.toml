@@ -17,7 +17,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "h5py",
+  "h5py","numpy"
 ]
 
 [project.urls]

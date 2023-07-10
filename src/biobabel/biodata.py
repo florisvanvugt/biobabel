@@ -1,6 +1,7 @@
 
 import numpy as np
 import h5py
+import time
 
 
 class Biodata:
@@ -136,6 +137,8 @@ class Biodata:
             for t in evs:
                 ax.axvline(x=t)
 
+        if self.name:
+            plt.suptitle(self.name)
         plt.tight_layout()
         plt.show()
 
@@ -145,7 +148,9 @@ class Biodata:
         
     
     def get_markers(self):
-        return self.markers
+        mrk= list(self.markers.keys())
+        mrk.sort()
+        return mrk
 
     def get_marker(self,m):
         return self.markers.get(m,[])
@@ -159,7 +164,7 @@ class Biodata:
         
         # This file is included in bioread
         self.hf = h5py.File(fname,'r')
-        self.fname = fname
+        self.name = fname
 
         bio = {}
 
@@ -195,3 +200,56 @@ class Biodata:
         self.preprocessed = {}
 
 
+
+        
+        
+    def save(self,fname):
+        """
+        Save current data file in hdphysio5 format
+
+        fname : filename of the file to be created
+        """
+
+        if not fname.lower().endswith('.hdf5'):
+            print("Currently only saving in hdphysio5 format.")
+            return
+
+        # Go ahead and save
+        
+        ## Create the HDF5 version
+        hf = h5py.File(fname, "w")
+        participants = self.get_participants() # set participants attribute
+        if self.name:
+            hf.attrs['name']=self.name
+        hf.attrs['participants']=participants
+        if self.date:
+            hf.attrs['date']=self.date
+        else:
+            hf.attrs['date']=time.strftime("%m/%d/%Y %H:%M:%S %Z%z")
+
+
+        # Create the markers --- TODO
+        eventtypes = self.get_markers()
+        if eventtypes:
+            hf.attrs['markers']=eventtypes
+            for e in eventtypes:
+                evs = self.get_marker(e)
+                hf.attrs[e]=evs
+
+
+        for p in participants:
+            dat = hf.create_group(p)
+
+            # Find channels for this participant
+            chans = self.find_channels({'participant':p})
+            for chan in chans:
+                hdr,dat = self.get(chan)
+                modality = hdr['modality']
+                sz = dat.shape[0]
+                dset = hf[p].create_dataset(modality,(sz,),dtype='f',data=dat)
+                dset.attrs['SR']=hdr['sampling_frequency']
+                dset.attrs['participant']=p
+                dset.attrs['modality']=modality
+                dset.attrs['units']=hdr.get('units','arbitrary')
+
+        hf.close()

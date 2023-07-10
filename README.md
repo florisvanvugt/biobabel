@@ -13,15 +13,27 @@ In Python:
 
 ```
 import biobabel
-dat = biobabel.load('filename.hdf5')
-dat.print()
+bio = biobabel.load('filename.hdf5')
+bio.print()
+bio.plot()
 ```
 
 
 
 
-
 # Requirements
+
+
+# Physiology dialects
+
+Currently supported dialects are:
+* TeensyECG (custom)
+* hdphysio5 https://github.com/florisvanvugt/hdphysio5
+
+Wish-list:
+* OpenSignals
+* XDF
+* EDF
 
 
 # Development

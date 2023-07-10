@@ -4,7 +4,8 @@ import numpy as np
 import os
 import datetime
 
-def load_teensyecg(fname):
+
+def load(fname):
 
     bio = biobabel.Biodata() # create a new biodata object
     bio.name = fname
@@ -45,23 +46,28 @@ def load_teensyecg(fname):
             # Try to parse it
             t, fsr, ecg, therm, ppg, snd = items[3:]
             alldata.append(
-                {"t":     int(t),
-                 "fsr":   int(fsr),
-                 "ecg":   int(ecg),
+                {"t"    : int(t),
+                 "fsr"  : int(fsr),
+                 "ecg"  : int(ecg),
                  "therm": int(therm),
-                 "ppg":   int(ppg),
-                 "snd":   int(snd)} )
+                 "ppg"  : int(ppg),
+                 "snd"  : int(snd)} )
 
     t = [ d['t'] for d in alldata ]
     t0 = min(t)
     dt = np.diff(t)/TIME_DIVISOR
 
+    mediandt = np.median(dt)
+    
     print("-- A human may want to inspect this:")
-    print("Time step values min = {:.5f}, max = {:.5f}, mean= {:.5f}, SD={:.5f}".format(
-        np.mean(dt),np.min(dt),np.max(dt),np.std(dt)))
-    print("# of time steps >.0015: {}".format(np.sum(dt>.0015)))
+    print("Time step values (in s) min={:.5f}, max={:.5f}, mean={:.5f}, median={:.5f}, SD={:.5f}".format(
+        np.min(dt),np.max(dt),np.mean(dt),np.median(dt),np.std(dt)))
+    THRESH = mediandt*1.1
+    print("# of time steps >.{}: {}".format(THRESH,np.sum(dt>THRESH)))
+    print("----")
+    print()
 
-    SR = 1/np.mean(dt)
+    SR = 1/mediandt
             
     for chan in ['fsr','ecg','therm','ppg','snd']:
         hdr = {'id'                :chan,
