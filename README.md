@@ -13,9 +13,10 @@ In Python:
 
 ```
 import biobabel
-bio = biobabel.load('filename.hdf5')
+bio = biobabel.load('filename.txt')
 bio.print()
 bio.plot()
+bio.save('new_filename.hdf5')
 ```
 
 
@@ -29,6 +30,7 @@ bio.plot()
 Currently supported dialects are:
 * TeensyECG (custom)
 * hdphysio5 https://github.com/florisvanvugt/hdphysio5
+* labstreaminglayer (LSL) XDF (rudimentary)
 
 Wish-list:
 * OpenSignals

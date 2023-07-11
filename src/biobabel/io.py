@@ -1,7 +1,7 @@
 
 import biobabel.load_teensyecg
 import biobabel.load_hdphysio5
-
+import biobabel.load_lsl
 
 import os
 
@@ -24,6 +24,8 @@ def load(fname,dialect=None):
             dialect="hdphysio5" # guess
         if fname.lower().endswith('.txt'):
             dialect="teensyecg" # guess
+        if fname.lower().endswith('.xdf'):
+            dialect="lsl" # guess
 
         if dialect:
             print("Guessed that this is {} format.".format(dialect))
@@ -34,6 +36,9 @@ def load(fname,dialect=None):
     if dialect=="hdphysio5":
         return biobabel.load_hdphysio5.load(fname)
 
+    if dialect=="lsl":
+        return biobabel.load_lsl.load(fname)
+    
     return None # did not manage to load
 
 
