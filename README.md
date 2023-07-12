@@ -42,6 +42,7 @@ Currently supported dialects are:
 
 Wish-list:
 * EDF
+* Biosemi BDF https://pypi.org/project/pybdf/
 
 
 # Development

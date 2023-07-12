@@ -4,6 +4,7 @@ import biobabel.load_hdphysio5
 import biobabel.load_lsl
 import biobabel.load_acq
 import biobabel.load_opensignals
+import biobabel.load_bramsbiobox
 
 import os
 
@@ -40,6 +41,9 @@ def load(fname,dialect=None):
 
     if dialect=="opensignals":
         return biobabel.load_opensignals.load(fname)
+
+    if dialect=="bramsbiobox":
+        return biobabel.load_bramsbiobox.load(fname)
     
     return None # did not manage to load
 
@@ -64,11 +68,12 @@ def guess_dialect(fname):
 
         if ln.find('OpenSignals')>-1:
             return 'opensignals'
-
+  
+        
         return "teensyecg" # guess
 
 
+    if fname.lower().endswith('.csv'):
+        #ln.find('Time(ms)')>-1 and ln.find('Xaccel')>-1 and ln.find('Gauge')>-1:
+        return 'bramsbiobox'
 
-
-
-                

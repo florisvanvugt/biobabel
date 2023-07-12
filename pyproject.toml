@@ -9,7 +9,7 @@ version = "0.5"
 authors = [
   { name="Floris van Vugt", email="ftvanvugt@gmail.com" },
 ]
-description = "Python package for reading major bio/physiology data formats (e.g. ECG, PPG, EDA)"
+description = "Python wrapper for reading major bio/physiology data formats (e.g. ECG, PPG, EDA) into a unified accessible interface"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
@@ -17,7 +17,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader"
+  "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas"
 ]
 
 [project.urls]

@@ -114,10 +114,12 @@ class Biodata:
         nsamp    = dat.shape[0]
         dur      = nsamp/SR
 
-        ret = "channel {} [ modality {} in {} ] {} samples @ {:.1f} Hz = {:.1f} s".format(
+        units = 'in {} '.format(hdr['units']) if 'units' in hdr else ''
+        
+        ret = "channel {} [ modality {} {}] {} samples @ {:.1f} Hz = {:.1f} s".format(
             chid,
             hdr.get('modality','N/A'),
-            hdr.get('units',   'N/A'),
+            units,
             nsamp,
             SR,
             dur
