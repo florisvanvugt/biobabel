@@ -3,6 +3,7 @@ import biobabel.load_teensyecg
 import biobabel.load_hdphysio5
 import biobabel.load_lsl
 import biobabel.load_acq
+import biobabel.load_opensignals
 
 import os
 
@@ -21,18 +22,10 @@ def load(fname,dialect=None):
     
     if dialect==None:
         # Try to guess
-        if fname.lower().endswith('.hdf5'):
-            dialect="hdphysio5" # guess
-        if fname.lower().endswith('.txt'):
-            dialect="teensyecg" # guess
-        if fname.lower().endswith('.xdf'):
-            dialect="lsl" # guess
-        if fname.lower().endswith('.acq'):
-            dialect="acq" # guess
-
+        dialect = guess_dialect(fname)
         if dialect:
             print("Guessed that this is {} format.".format(dialect))
-            
+        
     if dialect=="teensyecg":
         return biobabel.load_teensyecg.load(fname)
 
@@ -44,6 +37,9 @@ def load(fname,dialect=None):
 
     if dialect=="acq":
         return biobabel.load_acq.load(fname)
+
+    if dialect=="opensignals":
+        return biobabel.load_opensignals.load(fname)
     
     return None # did not manage to load
 
@@ -51,3 +47,28 @@ def load(fname,dialect=None):
 
 
 
+def guess_dialect(fname):
+
+    if fname.lower().endswith('.hdf5'):
+        return "hdphysio5" # guess
+    if fname.lower().endswith('.xdf'):
+        return "lsl" # guess
+    if fname.lower().endswith('.acq'):
+        return "acq" # guess
+
+    if fname.lower().endswith('.txt'):
+
+        # To guess the dialect, we have to actually probe the file itself
+        with open(fname) as f:
+            ln = f.readline()
+
+        if ln.find('OpenSignals')>-1:
+            return 'opensignals'
+
+        return "teensyecg" # guess
+
+
+
+
+
+                

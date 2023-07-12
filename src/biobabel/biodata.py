@@ -24,6 +24,12 @@ class Biodata:
         self.name         = ''
 
 
+    def summarize_meta(self):
+        return ', '.join([ "{}={}".format(k,self.meta[k]) for k in self.meta ])
+        
+    def add_meta(self,k,v):
+        self.meta[k]=v
+
     def uniquefy(self,ident):
         ids = self.find_channels()
         if ident not in ids:
@@ -77,11 +83,11 @@ class Biodata:
         t = np.arange(dat.shape[0])/hdr['sampling_frequency']
         return t
     
-            
 
     def summary(self):
         """ Return a summary of the current data (in str format) """
         ret = "Summary of {}\n".format(self.name)
+        ret += self.summarize_meta()+"\n"
         if self.date:
             ret += '[ date : {} ]\n'.format(self.date)
         for p in self.get_participants():
@@ -143,10 +149,10 @@ class Biodata:
 
         COLORS = get_colors(len(chans))
 
-        f,axs =plt.subplots(len(chans),1,sharex=True,figsize=(12,7))
+        f,axs =plt.subplots(len(chans),1,sharex=True,figsize=(12,7),squeeze=False)
 
         for i,chan in enumerate(chans):
-            ax = axs[i]
+            ax = axs[i][0]
             hdr,vals = self.get(chan)
             t = self.get_time(chan)
             col = COLORS[i]
