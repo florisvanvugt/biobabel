@@ -23,12 +23,6 @@ def load(fname):
     # This file is included in bioread
     streams, header = pyxdf.load_xdf(fname)
     print(header)
-    
-    print("Channels: ")
-    for s in streams:
-        i = s['info']
-        print(" {} {}".format(i['name'][0],i['type'][0]))
-    print()
 
     participants = [ s['info']['name'][0] for s in streams ]
     participants.sort()
@@ -40,6 +34,7 @@ def load(fname):
     
     for s in streams:
         info = s['info']
+        print(" {} {}".format(info['name'][0],info['type'][0]))
         tp = info['type'][0].lower()
         #if tp!='ecg': continue # for now we only accept ECG signals
 
@@ -62,7 +57,7 @@ def load(fname):
                'units'             :units
                }
         dat = rawdata
-        bio.channels.append((hdr,np.array(dat)))
+        bio.add_channel((hdr,np.array(dat)))
 
 
     bio.meta['date']=header['info']['datetime'][0]

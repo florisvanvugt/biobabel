@@ -75,7 +75,7 @@ def load(fname):
                'sampling_frequency':SR,
                'modality'          :chan}
         dat = [ d[chan] for d in alldata ]
-        bio.channels.append((hdr,np.array(dat)))
+        bio.add_channel((hdr,np.array(dat)))
 
         
     eventtypes = list(set([ x['type'] for x in events ]))

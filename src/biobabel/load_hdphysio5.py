@@ -42,7 +42,7 @@ def load(fname):
                    'sampling_frequency':SR,
                    'modality'          :mod}
             dat = np.array(dset[:]) # convert into numpy array just to be sure
-            bio.channels.append((hdr,dat))
+            bio.add_channel((hdr,dat))
             
     bio.markers = {}
     for m in hf.attrs.get('markers',[]):

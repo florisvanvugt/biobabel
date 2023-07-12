@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "biobabel"
-version = "0.0.1"
+version = "0.5"
 authors = [
   { name="Floris van Vugt", email="ftvanvugt@gmail.com" },
 ]
@@ -17,7 +17,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "h5py","numpy"
+  "h5py","numpy","pyxdf","matplotlib","bioread"
 ]
 
 [project.urls]

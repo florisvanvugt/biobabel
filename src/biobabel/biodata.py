@@ -24,6 +24,24 @@ class Biodata:
         self.name         = ''
 
 
+    def uniquefy(self,ident):
+        ids = self.find_channels()
+        if ident not in ids:
+            return ident
+        cnt = 1
+        newid = "{}.{}".format(ident,cnt)
+        while newid in self.find_channels():
+            cnt += 1
+            newid = "{}.{}".format(ident,cnt)
+        return newid
+
+    def add_channel(self,hdrdat):
+        """ Add the channel with specified header information and data """
+
+        hdr,dat = hdrdat
+        hdr['id']=self.uniquefy(hdr['id']) # make the ID unique in case it already exists
+        self.channels.append((hdr,dat))
+        
     def find_channels(self,crit={}):
         """ Find the channel id's satisfying certain criteria """
         chans = []
@@ -113,6 +131,9 @@ class Biodata:
         import matplotlib.pyplot as plt
 
         chans = self.find_channels()
+        if not len(chans):
+            print("No channels to plot.")
+            return
 
         def get_colors(N):
             import colorsys
@@ -246,7 +267,7 @@ class Biodata:
                 hdr,dat = self.get(chan)
                 modality = hdr['modality']
                 sz = dat.shape[0]
-                dset = hf[p].create_dataset(modality,(sz,),dtype='f',data=dat)
+                dset = hf[p].create_dataset(chan,(sz,),dtype='f',data=dat)
                 dset.attrs['SR']=hdr['sampling_frequency']
                 dset.attrs['participant']=p
                 dset.attrs['modality']=modality

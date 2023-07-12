@@ -30,11 +30,11 @@ bio.save('new_filename.hdf5')
 Currently supported dialects are:
 * TeensyECG (custom)
 * hdphysio5 https://github.com/florisvanvugt/hdphysio5
-* labstreaminglayer (LSL) XDF (rudimentary)
+* labstreaminglayer (LSL) XDF (rudimentary) (thanks to `pyxdf`)
+* BioPAC Acknowledge (acq) (thanks to `bioread`)
 
 Wish-list:
 * OpenSignals
-* XDF
 * EDF
 
 
