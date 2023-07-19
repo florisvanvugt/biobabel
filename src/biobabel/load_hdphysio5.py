@@ -48,4 +48,11 @@ def load(fname):
     for m in hf.attrs.get('markers',[]):
         bio.markers[m] = hf.attrs[m][:] # get the markers in question, make a copy
 
+    if 'meta' in hf: # if we have a meta dataset (should be empty but we use it to carry the attributes)
+        #print("Scavenge meta")
+        m = hf['meta']
+        for k in m.attrs:
+            #print("Add {}".format(k))
+            bio.add_meta(k,m.attrs[k])
+
     return bio

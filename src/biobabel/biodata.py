@@ -24,7 +24,18 @@ class Biodata:
 
 
     def summarize_meta(self):
-        return '\n'.join([ "· {}={}".format(k,self.meta[k]) for k in self.meta ])
+        # Pretty printing courtesy of
+        # https://stackoverflow.com/questions/54573444/how-to-print-key-value-pairs-of-a-dict-as-an-aligned-table
+        if len(self.meta.keys()):
+            max_key_len = max(map(len,self.meta)) # find the maximum key length
+            format_string = '· {{key:{}}}  {{value}}\n'.format(max_key_len)
+            toret = ""
+            for key, value in self.meta.items():
+                toret += (format_string.format(key=key, value=value))
+            return toret
+        else:
+            return ""
+        #return '\n'.join([ "· {}={}".format(k,self.meta[k]) for k in self.meta ])
         
     def add_meta(self,k,v):
         self.meta[k]=v
@@ -186,47 +197,6 @@ class Biodata:
 
     
 
-    def from_hdphysio5(self,fname):
-
-        self.clear()
-        
-        # This file is included in bioread
-        self.hf = h5py.File(fname,'r')
-        self.name = fname
-
-        bio = {}
-
-        if 'participants' not in self.hf.attrs:
-            print("# Error, missing participants attribute in the root.")
-        if 'date' in self.hf.attrs:
-            self.date = self.hf.attrs['date']
-        self.participants = self.hf.attrs['participants']
-        self.channels = []
-        self.channels_by_type = {}
-        for p in self.participants:
-            for ch in self.hf[p].keys():
-                nm = "{}/{}".format(p,ch)
-                dset = self.hf[p][ch]
-                if self.SR:
-                    if dset.attrs['SR']!=self.SR:
-                        print("## ERROR, sampling rate {} differs from that of other channels. Not currently implemented.")
-                else:
-                    self.SR=dset.attrs['SR']
-                assert self.SR==dset.attrs['SR']
-                bio[nm]=dset ##np.array(dset[:]) # convert into numpy array just to be sure
-                mod = dset.attrs['modality']
-                self.channels.append(nm)
-                self.channels_by_type[mod] = self.channels_by_type.get(mod,[])+[nm]
-
-        self.markers = {}
-        for m in self.hf.attrs.get('markers',[]):
-            self.markers[m] = self.hf.attrs[m] # get the markers in question
-            
-        bio['t']=np.arange(dset.shape[0])/self.SR # recreate a time vector
-
-        self.bio = bio
-        self.preprocessed = {}
-
 
 
         
@@ -255,8 +225,12 @@ class Biodata:
         else:
             hf.attrs['date']=time.strftime("%m/%d/%Y %H:%M:%S %Z%z")
 
+        # Create an empty dataset to hold meta attributes
+        m = hf.create_dataset("meta", data=h5py.Empty("f"))
+        for k in self.meta:
+            m.attrs[k]=self.meta[k]
 
-        # Create the markers --- TODO
+        # Create the markers
         eventtypes = self.get_markers()
         if eventtypes:
             hf.attrs['markers']=eventtypes
@@ -264,7 +238,7 @@ class Biodata:
                 evs = self.get_marker(e)
                 hf.attrs[e]=evs
 
-
+        # Add the data channels for each participant
         for p in participants:
             dat = hf.create_group(p)
 
