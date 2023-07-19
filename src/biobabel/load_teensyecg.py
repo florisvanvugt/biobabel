@@ -3,6 +3,7 @@ import biobabel
 import numpy as np
 import os
 import datetime
+import json
 
 
 def load(fname):
@@ -15,8 +16,20 @@ def load(fname):
     bio.meta['date']=dt_m.strftime("%m/%d/%Y %H:%M:%S %Z%z")
     
     with open(fname,'r') as f:
+        firstline = f.readline()
+        #print(firstline)
         cont = f.read()
 
+    # See if we can scrape more config data
+    cfg = firstline.find('CONFIG')
+    if cfg>-1:
+        c = firstline[(cfg+6):]
+        #print(c)
+        config = json.loads(c)
+        #print(config)
+        for k in config:
+            bio.add_meta(k,config[k])
+        
     # Remove some initial nonsense data that typically enters these files
     startp = cont.find("# Start signal received")
     if startp<0:
