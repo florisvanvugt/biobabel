@@ -17,7 +17,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas"
+  "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas","json"
 ]
 
 [project.urls]

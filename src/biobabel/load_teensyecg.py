@@ -83,10 +83,13 @@ def load(fname):
     SR = 1/mediandt
             
     for chan in ['fsr','ecg','therm','ppg','snd']:
-        hdr = {'id'                :chan,
-               'participant'       :'participant',
-               'sampling_frequency':SR,
-               'modality'          :chan}
+        hdr = {
+            'id'                :chan,
+            'participant'       :'participant',
+            'sampling_frequency':SR,
+            'modality'          :chan,
+            'units'             :'a.u'
+        }
         dat = [ d[chan] for d in alldata ]
         bio.add_channel((hdr,np.array(dat)))
 

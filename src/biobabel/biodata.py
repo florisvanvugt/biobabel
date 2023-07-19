@@ -14,7 +14,6 @@ class Biodata:
     def __init__(self):
         self.clear()
 
-
     def clear(self):
         """ Clear all data currently in the object """
         self.date         = ''
@@ -25,7 +24,7 @@ class Biodata:
 
 
     def summarize_meta(self):
-        return ', '.join([ "{}={}".format(k,self.meta[k]) for k in self.meta ])
+        return '\n'.join([ "· {}={}".format(k,self.meta[k]) for k in self.meta ])
         
     def add_meta(self,k,v):
         self.meta[k]=v
