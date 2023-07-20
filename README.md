@@ -25,7 +25,7 @@ bio.plot()
 bio.save('new_filename.hdf5')
 ```
 
-
+More complete overview of functionality in [Jupyter notebook](https://github.com/florisvanvugt/biobabel/blob/main/tests/Usage.ipynb).
 
 
 # Requirements
