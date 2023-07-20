@@ -13,8 +13,8 @@ def load(fname):
     
     m_time = os.path.getmtime(fname)
     dt_m = datetime.datetime.fromtimestamp(m_time)
-    bio.meta['date']=dt_m.strftime("%m/%d/%Y %H:%M:%S %Z%z")
-    
+    bio.add_meta('date',dt_m.strftime("%m/%d/%Y %H:%M:%S %Z%z"))
+   
     with open(fname,'r') as f:
         firstline = f.readline()
         #print(firstline)

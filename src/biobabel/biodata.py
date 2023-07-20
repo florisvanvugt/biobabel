@@ -55,7 +55,8 @@ class Biodata:
         """ Add the channel with specified header information and data """
 
         hdr,dat = hdrdat
-        hdr['id']=self.uniquefy(hdr['id']) # make the ID unique in case it already exists
+        newid = hdr['id'].replace('/','_') # slashes don't work because HDF5 gets confused
+        hdr['id']=self.uniquefy(newid) # make the ID unique in case it already exists
         self.channels.append((hdr,dat))
         
     def find_channels(self,crit={}):
@@ -249,9 +250,9 @@ class Biodata:
                 modality = hdr['modality']
                 sz = dat.shape[0]
                 dset = hf[p].create_dataset(chan,(sz,),dtype='f',data=dat)
-                dset.attrs['SR']=hdr['sampling_frequency']
-                dset.attrs['participant']=p
-                dset.attrs['modality']=modality
-                dset.attrs['units']=hdr.get('units','arbitrary')
+                dset.attrs['SR']          =hdr['sampling_frequency']
+                dset.attrs['participant'] =p
+                dset.attrs['modality']    =modality
+                dset.attrs['units']       =hdr.get('units','arbitrary')
 
         hf.close()
