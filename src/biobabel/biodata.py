@@ -86,7 +86,8 @@ class Biodata:
         for hdr,dat in self.channels:
             if hdr.get('id',None)==chid:
                 return hdr,dat
-
+        print("Could not find channel {}".format(chid))
+        return None,None
 
     def get_time(self,chid):
         # Given a channel, reproduce a time vector
@@ -194,9 +195,6 @@ class Biodata:
 
     def get_marker(self,m):
         return self.markers.get(m,[])
-
-
-    
 
 
 
