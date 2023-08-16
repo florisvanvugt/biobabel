@@ -96,6 +96,16 @@ class Biodata:
         return t
     
 
+    def get_duration(self,chid):
+        """ Get the duration of a channel in seconds """
+        hdr,dat  = self.get(chid)
+        SR       = hdr['sampling_frequency']
+        nsamp    = dat.shape[0]
+        dur      = nsamp/SR
+        return dur
+
+
+    
     def summary(self):
         """ Return a summary of the current data (in str format) """
         ret = "Summary of {}\n".format(self.name)
