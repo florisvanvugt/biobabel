@@ -1,6 +1,6 @@
 
 
-# What is this
+# Biobabel : a unified interface for reading a plethora of physiology file formats
 
 Many different file formats exist for physiology signals such as cardiac (ECG, PPG) or respiratory data. Many packages exist in Python to read these formats but they load into different data structures. This package is a wrapper of sorts for already existing tools providing a unified easy-to-use interface.
 
@@ -15,6 +15,17 @@ python -m pip install "biobabel @ git+https://github.com/florisvanvugt/biobabel"
 # Usage
 
 
+## Command line
+To preview a file, use the provided script from the command line:
+
+```
+biobabel <FILENAME>
+```
+
+You can leave `<FILENAME>` blank in which case you will be prompted to select a file you want to preview.
+
+
+## Python
 Simple usage example in Python:
 
 ```
