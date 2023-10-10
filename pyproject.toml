@@ -20,6 +20,10 @@ dependencies = [
   "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas"
 ]
 
+[project.scripts]
+# Command line interface entrypoint scripts
+biobabel = "biobabel:display"
+
 [project.urls]
 "Homepage" = "https://github.com/florisvanvugt/biobabel"
 
