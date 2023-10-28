@@ -9,7 +9,7 @@ Many different file formats exist for physiology signals such as cardiac (ECG, P
 # Installation
 
 ```
-python -m pip install "biobabel @ git+https://github.com/florisvanvugt/biobabel"
+python3 -m pip install biobabel
 ```
 
 # Usage
@@ -58,6 +58,13 @@ Wish-list:
 
 
 # Development
+
+Install from Github:
+
+```
+python -m pip install "biobabel @ git+https://github.com/florisvanvugt/biobabel"
+```
+
 
 Install locally:
 
