@@ -5,6 +5,8 @@ import biobabel.load_lsl
 import biobabel.load_acq
 import biobabel.load_opensignals
 import biobabel.load_bramsbiobox
+import biobabel.load_genericcsv
+import biobabel.load_bdf
 
 import os
 
@@ -42,6 +44,12 @@ def load(fname,dialect=None):
     if dialect=="opensignals":
         return biobabel.load_opensignals.load(fname)
 
+    if dialect=="csv":
+        return biobabel.load_genericcsv.load(fname)
+
+    if dialect=="bdf":
+        return biobabel.load_bdf.load(fname)
+    
     if dialect=="bramsbiobox":
         return biobabel.load_bramsbiobox.load(fname)
     
@@ -53,6 +61,8 @@ def load(fname,dialect=None):
 
 def guess_dialect(fname):
 
+    if fname.lower().endswith('.bdf'):
+        return "bdf" # guess
     if fname.lower().endswith('.hdf5'):
         return "hdphysio5" # guess
     if fname.lower().endswith('.xdf'):
@@ -74,6 +84,15 @@ def guess_dialect(fname):
 
 
     if fname.lower().endswith('.csv'):
-        #ln.find('Time(ms)')>-1 and ln.find('Xaccel')>-1 and ln.find('Gauge')>-1:
-        return 'bramsbiobox'
 
+        # To guess the dialect, we have to actually probe the file itself
+        with open(fname) as f:
+            ln = f.readline()
+
+        if ln.find('Time(ms)')>-1 and ln.find('Xaccel')>-1 and ln.find('Gauge')>-1:
+            return 'bramsbiobox'
+
+        else:
+            return 'csv' # generic CSV
+
+    return 'csv' # default is generic CSV

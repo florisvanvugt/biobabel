@@ -49,12 +49,13 @@ Currently supported dialects are:
 * labstreaminglayer (LSL) XDF (rudimentary) thanks to [pyxdf](https://pypi.org/project/pyxdf/)
 * BioPAC Acknowledge (acq) thanks to [bioread](https://pypi.org/project/bioread/)
 * opensignals ("OpenSignals (r)evolution" thanks to [opensignalsreader](https://github.com/PGomes92/opensignalsreader)
-* Brams-Bio-Box (custom)
-* TeensyECG (custom)
+* Biosemi BDF thanks to [pybdf](https://pypi.org/project/pybdf/)
+* Generic CSV (where CSV delimiter is automatically inferred and the time column is guessed as well)
+* Brams-Bio-Box (in-house format, even though the Generic-CSV functionality should take care of this now)
+* TeensyECG (in-house format)
 
 Wish-list:
-* EDF
-* Biosemi BDF https://pypi.org/project/pybdf/
+* EDF through [PyEDFlib](https://pyedflib.readthedocs.io/en/latest/)
 
 
 # Development
