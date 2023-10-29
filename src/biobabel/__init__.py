@@ -4,6 +4,7 @@ from biobabel import *
 
 from biobabel.biodata import Biodata
 
+DATEFORMAT = "%m/%d/%Y %H:%M:%S %Z%z"
 
 
 def display():
@@ -37,3 +38,15 @@ def display():
     bio = load(fname)
     bio.print()
     bio.plot()
+
+
+
+
+def guess_modality(nm):
+    """ Guess the modality from the label of a signal column """
+    l = nm.lower()
+    for mod in ['ecg','eda','gsr','ppg']:
+        if l.find(mod)>-1:
+            return mod
+    return nm
+    

@@ -45,6 +45,10 @@ def guess_time_column(dat):
 
 
 
+
+
+
+
 def load(fname):
 
     """ Load a file with CSV format. """
@@ -56,7 +60,7 @@ def load(fname):
     
     m_time = os.path.getmtime(fname)
     dt_m = datetime.datetime.fromtimestamp(m_time)
-    bio.meta['date']=dt_m.strftime("%m/%d/%Y %H:%M:%S %Z%z")
+    bio.meta['date']=dt_m.strftime(biobabel.DATEFORMAT)
 
     ## gb['renames'] comes from the file configuration
     tab = pd.read_csv(fname,sep=None,engine='python') # pandas will try to guess the delimiter, this might fail!
@@ -97,7 +101,7 @@ def load(fname):
             'id'                :col,
             'participant'       :participant,
             'sampling_frequency':SR,
-            'modality'          :nm,
+            'modality'          :biobabel.guess_modality(nm),
             'units'             :'V'}
         data = 3.3 * (np.array(tab[col]) / 1023)
         bio.add_channel((hdr,data))

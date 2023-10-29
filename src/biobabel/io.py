@@ -7,6 +7,7 @@ import biobabel.load_opensignals
 import biobabel.load_bramsbiobox
 import biobabel.load_genericcsv
 import biobabel.load_bdf
+import biobabel.load_edf
 
 import os
 
@@ -49,6 +50,9 @@ def load(fname,dialect=None):
 
     if dialect=="bdf":
         return biobabel.load_bdf.load(fname)
+
+    if dialect=="edf":
+        return biobabel.load_edf.load(fname)
     
     if dialect=="bramsbiobox":
         return biobabel.load_bramsbiobox.load(fname)
@@ -67,6 +71,8 @@ def guess_dialect(fname):
         return "hdphysio5" # guess
     if fname.lower().endswith('.xdf'):
         return "lsl" # guess
+    if fname.lower().endswith('.edf'):
+        return "edf" # guess
     if fname.lower().endswith('.acq'):
         return "acq" # guess
 
@@ -79,17 +85,16 @@ def guess_dialect(fname):
         if ln.find('OpenSignals')>-1:
             return 'opensignals'
   
-        
-        return "teensyecg" # guess
+        return "csv" # probably best to try
 
 
     if fname.lower().endswith('.csv'):
 
         # To guess the dialect, we have to actually probe the file itself
         with open(fname) as f:
-            ln = f.readline()
+            ln = f.readline().lower()
 
-        if ln.find('Time(ms)')>-1 and ln.find('Xaccel')>-1 and ln.find('Gauge')>-1:
+        if ln.find('time(ms)')>-1 and ln.find('xaccel')>-1 and ln.find('gauge')>-1:
             return 'bramsbiobox'
 
         else:
