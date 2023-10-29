@@ -74,9 +74,9 @@ At the time of writing the following data formats are supported:
 | BIOSEMI 24-bit BDF                  | .bdf              | [pybdf](https://pypi.org/project/pybdf/)                           |               |
 | BioPAC Acknowledge                  | .acq              | [bioread](https://pypi.org/project/bioread/)                       | Full          |
 | OpenSignals (r)evolution / BiTalino | .txt              | [opensignalsreader](https://github.com/PGomes92/opensignalsreader) |               |
-|                                     | .edf              |                                                                    |               |
+| European Data Format                | .edf              | [pyedflib](https://pyedflib.readthedocs.io/en/latest/)             | Full          |
 	
-Wishlist: https://github.com/holgern/pyedflib
+
 
 ## Easy previewing
 

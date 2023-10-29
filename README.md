@@ -59,7 +59,7 @@ Currently supported dialects are:
 
 # Development
 
-Install from Github:
+Install latest development version from Github:
 
 ```
 python -m pip install "biobabel @ git+https://github.com/florisvanvugt/biobabel"
@@ -76,14 +76,6 @@ and editable:
 
 ```
 pip install -e .
-```
-
-
-
-Create wheels with:
-
-```
-python3 -m build
 ```
 
 

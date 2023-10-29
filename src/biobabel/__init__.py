@@ -4,7 +4,7 @@ from biobabel import *
 
 from biobabel.biodata import Biodata
 
-DATEFORMAT = "%m/%d/%Y %H:%M:%S %Z%z"
+DATEFORMAT = "%Y/%m/%d %H:%M:%S %Z%z"
 
 
 def display():
