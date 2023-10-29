@@ -23,6 +23,9 @@ def load(fname):
     dt_m = datetime.datetime.fromtimestamp(m_time)
     dt = h.get('startdate',dt_m)
     bio.meta['date']=dt.strftime(biobabel.DATEFORMAT)
+    for k in h: # copy over the header information
+        if k not in ['SignalHeaders','channels']:
+            bio.add_meta(k,str(h[k]))
 
     # Get participant identifier
     participant = h.get('patientcode','participant')

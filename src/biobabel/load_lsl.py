@@ -12,8 +12,8 @@ def load(fname):
 
     """ Load LSL format XDF file. """
     
-    print("ATTENTION, this is a very case-specific script. Should not be used")
-    print("in general to read XDF files.")
+    print("ATTENTION, this is a very case-specific script.")
+    print("It might not work in general to read XDF files.")
     print("Make sure you know what you are doing if you proceed here.")
 
     

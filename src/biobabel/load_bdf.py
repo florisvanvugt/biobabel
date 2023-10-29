@@ -22,7 +22,7 @@ def load(fname):
     bio.name = fname
     m_time   = os.path.getmtime(fname)
     dt_m     = datetime.datetime.fromtimestamp(m_time)
-    bio.date = dt_m.strftime("%m/%d/%Y %H:%M:%S %Z%z")
+    bio.date = dt_m.strftime(biobabel.DATEFORMAT)
 
     rec = bdfRec.getData()
     

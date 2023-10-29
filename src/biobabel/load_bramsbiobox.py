@@ -28,7 +28,7 @@ def load(fname):
     
     m_time = os.path.getmtime(fname)
     dt_m = datetime.datetime.fromtimestamp(m_time)
-    bio.meta['date']=dt_m.strftime("%m/%d/%Y %H:%M:%S %Z%z")
+    bio.meta['date']=dt_m.strftime(biobabel.DATEFORMAT)
 
     ## gb['renames'] comes from the file configuration
     tab = pd.read_csv(fname,sep=',')
