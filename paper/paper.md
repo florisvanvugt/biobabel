@@ -2,13 +2,18 @@
 title: 'biobabel: a unified interface for reading a plethora of file formats for biosignals such as cardiac, respiration, electrodermal data'
 tags:
   - biosignals
+  - physiology
   - heart
   - breathing
+  - respiration
   - PPG
   - ECG
+  - EDA
   - file format
   - conversion
   - XDF
+  - EDF
+  - labstreaminglayer
   - ACQ
   - HDF5
   - Python
@@ -40,9 +45,9 @@ Major file formats at the time of writing:
 
 What is needed is a package that is able to read each of these file format using a common interface. This means that code is portable and other software packages can capitalize on `biobabel` taking care of the nitty gritty of file format reading and focus instead on functionality.
 
-Python packages exist that can read these data formats. However, each makes the data available in a different structure. This means that pipelines have to be changed when switching from one data format to another, which is tedious and error-prone. This situation is further complicated by the fact that different file formats make different assumptions about the data structure: in some cases signals in the same file are forced to have the same sampling rate (e.g. OpenSignals) whereas in other formats sampling rates can vary by signal (e.g. XDF). What is needed is a package that reads data into a standardized data format allowing data to be accessed in a transparent manner.
+Python packages exist that can read these data formats. However, each makes the data available in a different structure. This means that pipelines have to be changed when switching from one data format to another, which is tedious and error-prone. This situation is further complicated by the fact that different file formats make different assumptions about the data structure: in some cases signals in the same file are forced to have the same sampling rate (e.g. OpenSignals) whereas in other formats sampling rates can vary by signal (e.g. XDF). In some cases the signals are supposed to have the same onset time (e.g. EDF) whereas other formats allow different onset times requiring re-aligning (e.g. XDF). What is needed is a software package that abstracts away from these differences: a package that reads data from a variety of data formats and making it available in a standardized, transparent manner.
 
-At the time of writing, `biobabel` is in active use at the [Human Connection Science Lab](https://connectionscience.org/) and the [International Laboratory for Brain, Music and Sound Research (BRAMS)](https://brams.org).
+This is what the `biobabel` package aims to do. At the time of writing, `biobabel` is in active use at the [Human Connection Science Lab](https://connectionscience.org/) and the [International Laboratory for Brain, Music and Sound Research (BRAMS)](https://brams.org).
 
 
 
