@@ -20,8 +20,15 @@ def load(fname):
     data = bioread.read_file(fname)
     
     bio.name = fname
-    dt       = data.earliest_marker_created_at.strftime("%m/%d/%Y %H:%M:%S %Z%z")
-    bio.date = dt
+    earliest = data.earliest_marker_created_at
+    if earliest:
+        dt       = earliest.strftime(biobabel.DATEFORMAT)#"%m/%d/%Y %H:%M:%S %Z%z")
+        bio.date = dt
+    else:
+        m_time = os.path.getmtime(fname)
+        dt_m = datetime.datetime.fromtimestamp(m_time)
+        bio.meta['date']=dt_m.strftime(biobabel.DATEFORMAT)
+        
 
     for ch in data.channels:
 
