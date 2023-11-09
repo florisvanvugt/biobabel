@@ -7,12 +7,19 @@ import numpy as np
 import os
 import datetime
 
-from pybdf import bdfRecording
+try:
+    from pybdf import bdfRecording
+except ImportError as e:
+    bdfRecording = None # on some platform this package seemed to give issues
+
 
 
 def load(fname):
 
     """ Load BDF file """
+
+    if not bdfRecording:
+        raise ImportError(f"Loading BDF files requires pybdf, which failed to import.")
     
     bio = biobabel.Biodata() # create a new biodata object
 

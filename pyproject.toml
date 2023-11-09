@@ -17,8 +17,12 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas","pybdf","pyedflib"
+  "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas","pyedflib"
 ]
+
+[project.optional-dependencies]
+BDF = ["pybdf" ]
+# pyBDF seemed problematic under Anaconda, so it is made optional
 
 [project.scripts]
 # Command line interface entrypoint scripts
