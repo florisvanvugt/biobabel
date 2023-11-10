@@ -7,10 +7,11 @@ from biobabel.biodata import Biodata
 DATEFORMAT = "%Y/%m/%d %H:%M:%S %Z%z"
 
 
-def display():
-    # Launch ECG analysis
+def display(viewer=False):
+
     import sys
     import os
+    from tkinter import filedialog as fd
 
     fname = None
     if len(sys.argv)>1:
@@ -18,8 +19,8 @@ def display():
     else:
 
         filetypes = (
-            ('HDF5 dataset', '*.hdf5'),
-            ('All files', '*.*')
+            ('All files', '*.*'),
+            ('HDF5 dataset', '*.hdf5')
         )
 
         fname = fd.askopenfilename(
@@ -37,7 +38,19 @@ def display():
         
     bio = load(fname)
     bio.print()
-    bio.plot()
+
+    if viewer:
+        import biobabel.viewer as viewer
+        viewer.main(bio)
+
+    else:
+        #Simpler version:
+        bio.plot()
+
+
+
+def view():
+    display(viewer=True)
 
 
 
