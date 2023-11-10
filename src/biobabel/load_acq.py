@@ -44,8 +44,12 @@ def load(fname):
         dat = ch.data
         bio.add_channel((hdr,np.array(dat)))
     
+    bio.markers = {}
     for m in data.event_markers:
-        print('unprocessed marker {0}: Channel {1}, type {2}'.format(m.text, m.channel_name, m.type))
+        tp = str(m.type)
+        idx = m.sample_index
+        t = idx/ch.samples_per_second
+        bio.markers[tp] = bio.markers.get(tp,[]) + [t] # Append the marker
 
     #bio.markers = {}
     #for m in hf.attrs.get('markers',[]):
