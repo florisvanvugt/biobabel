@@ -137,7 +137,22 @@ def process_scroll_events(event):
         if event.step>0:
             forward_in_time()
         
-        
+
+
+
+            
+
+def load_file(bio):
+    gb['bio']=bio
+    chans = bio.find_channels()
+    if not len(chans):
+        print("No channels to plot.")
+        return
+    load_channels(chans)
+    gb['COLORS'] = dict(zip(chans,get_colors(len(chans))))
+    
+    
+            
 
 def load_channels(chans):
     # Load data from the given channels
@@ -293,7 +308,6 @@ def make_plot():
 
     for i,chan in enumerate(gb['channels']):
         ax = gb['axs'][i][0]
-        ax.set_ylabel(chan)
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         
@@ -352,6 +366,7 @@ def redraw():
                 zorder=-10,
                 color=gb['COLORS'][chan])
 
+        ax.set_ylabel(chan)
 
 
         # Now determine the ylim scale
@@ -367,7 +382,6 @@ def redraw():
             ax.set_ylim(mn-pad,mx+pad)
     
     ax.set_xlabel('t(s)')
-    #ax.set_xlim(gb['tstart'],gb['tstart']+WINDOW_T)
     update_axes()
 
 
@@ -413,13 +427,7 @@ def main(bio):
     ##
     ##
 
-    gb['bio']=bio
-    chans = bio.find_channels()
-    if not len(chans):
-        print("No channels to plot.")
-        return
-    load_channels(chans)
-    gb['COLORS'] = dict(zip(chans,get_colors(len(chans))))
+    load_file(bio)
     
     
         
@@ -473,8 +481,8 @@ def main(bio):
     menubar = Menu(root)
 
     filemenu = Menu(menubar, tearoff=0)
-    filemenu.add_command(label="Open", command=lambda : None)
-    filemenu.add_separator()
+    #filemenu.add_command(label="Open", command=lambda : None)
+    #filemenu.add_separator()
     filemenu.add_command(label="Exit", command=quit)
     menubar.add_cascade(label="File", menu=filemenu)
 

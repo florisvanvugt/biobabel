@@ -19,10 +19,16 @@ python3 -m pip install biobabel
 To preview a file, use the provided script from the command line:
 
 ```
+bioview <FILENAME>
+```
+
+Or, for a simpler lightweight viewer:
+
+```
 biobabel <FILENAME>
 ```
 
-You can leave `<FILENAME>` blank in which case you will be prompted to select a file you want to preview.
+You can omit `<FILENAME>` in which case you will be prompted to select a file you want to preview.
 
 
 ## Python

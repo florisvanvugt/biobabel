@@ -85,7 +85,7 @@ def guess_dialect(fname):
         if ln.find('OpenSignals')>-1:
             return 'opensignals'
   
-        return "csv" # probably best to try
+        return "teensyecg" # probably best to try
 
 
     if fname.lower().endswith('.csv'):
