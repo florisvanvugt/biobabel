@@ -198,19 +198,52 @@ class Biodata:
 
 
 
+
+
+    # Make changes
+    def rename_channel(self,old_id,new_id):
+        for hdr,_ in self.channels:
+            if hdr['id']==old_id:
+                hdr['id']=new_id
+                return
+        print("No channel found with ID {}".format(old_id))
+        return 
+
+
+
+    def update_channel(self,ident,specs):
+        """ Update the header of a particular channel. """
+        for hdr,_ in self.channels:
+            if hdr['id']==ident:
+                for k in specs:
+                    #assert k!="id" # probably not safe to change channel ID that way
+                    hdr[k]=specs[k]
+                return # We're done, there should be only one channel with that ID
+        print("No channel found with ID {}. Nothing updated.".format(ident))
+        return
+        
+
+
+
+    # Marker functionality 
         
         
     
     def get_markers(self):
+        """ Returns a list of names of markers. """
         mrk= list(self.markers.keys())
         mrk.sort()
         return mrk
 
     def get_marker(self,m):
+        """ For a given marker, returns a list of time points stored under that marker. """
         return self.markers.get(m,[])
 
 
 
+
+
+    
         
         
     def save(self,fname):
