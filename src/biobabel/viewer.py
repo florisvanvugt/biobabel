@@ -4,7 +4,8 @@
 import tkinter
 from tkinter import filedialog as fd
 from tkinter import font as tkFont  # for convenience
-from tkinter import Toplevel
+from tkinter import Toplevel, Menu
+from tkinter import IntVar
 import tkinter.messagebox
 from tkinter.messagebox import askyesno
 
@@ -138,7 +139,50 @@ def process_scroll_events(event):
         
         
 
+def load_channels(chans):
+    # Load data from the given channels
+    gb['channels'] = chans
+    bio = gb['bio']
 
+    gb['n.signals']= len(chans)
+
+    gb['data'] = {}
+    gb['tmin']=np.Inf
+    gb['tmax']=-np.Inf
+    for c in chans:
+        hdr,vals = bio.get(c)
+        t = bio.get_time(c)
+        gb['tmin']=min([gb['tmin'],min(t)])
+        gb['tmax']=max([gb['tmax'],max(t)])
+        gb['data'][c]={"hdr":hdr,
+                       "vals":vals,
+                       "t":t}
+    #print("Current channels")
+    #print(gb['channels'])
+    
+
+def show_channels(chans):
+    load_channels(chans)
+    make_plot()
+    redraw()
+    for c in gb['view.active'].keys():
+        #if c in gb['channels']:
+        gb['view.active'][c].set(1 if c in gb['channels'] else 0)
+        #else:
+        #gb['view.active'][c].set(0)
+
+            
+def toggle_channel(ch):
+    chans = gb['channels']
+    if ch in chans:
+        if len(chans)>2:
+            chans.remove(ch)
+    else:
+        chans.append(ch)
+    show_channels(chans)
+
+
+            
 def on_closing():
     gb['root'].destroy()
     sys.exit(0)
@@ -246,6 +290,14 @@ def make_plot():
     canvas.mpl_connect("scroll_event", process_scroll_events)
     
     canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True)
+
+    for i,chan in enumerate(gb['channels']):
+        ax = gb['axs'][i][0]
+        ax.set_ylabel(chan)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+    
     redraw()
 
 
@@ -254,6 +306,7 @@ ALPHA = .8
 
 
 
+DO_SUBSAMPLE = True
 TARGET_PLOT_POINTS = 2000
 # how many points to actually plot in the current window (approximately)
 # If the truly available data is more than this, we downsample just for display purposes
@@ -270,16 +323,6 @@ def redraw():
         ax = gb['axs'][i][0]
         ax.cla() # clear the axes
 
-        #c = gb['channel']
-
-        # Plot on axis
-        #biodata = gb['biodata']
-        #SR = gb['SR']
-
-        #check if there's a rounding error causing differing lengths of plotx and signal
-        #ecg_target = gb['ecg-prep-column']
-        #ecg = gb['signal'] #biodata.bio[ecg_target] # gb['ecg_clean']
-        ##print(ecg.shape)
         toplot = gb['data'][chan]
 
         t = toplot['t']
@@ -294,24 +337,21 @@ def redraw():
 
         nplot = sum(tsels) ## the number of samples we'd plot if we don't do sub-sampling
 
-        factor = int(nplot/TARGET_PLOT_POINTS)
-        if factor>1:
-            x,y = x[::factor],y[::factor]
+        if DO_SUBSAMPLE:
+            factor = int(nplot/TARGET_PLOT_POINTS)
+            if factor>1:
+                x,y = x[::factor],y[::factor]
 
         pch = '-'
-        if nplot<100:
+        if nplot<200:
             pch = 'o-'
 
         ax.plot(x,y,
                 pch,
                 label='cleaned',
                 zorder=-10,
-                color=gb['COLORS'][i])
+                color=gb['COLORS'][chan])
 
-        ax.set_ylabel(chan)
-        ax.set_xlabel('t(s)')
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
 
 
         # Now determine the ylim scale
@@ -322,9 +362,11 @@ def redraw():
             mn,mx = np.min(y),np.max(y)
 
             # add some padding on the sides
-            pad = .025*(mx-mn)
+            pad = .025*(mx-mn)#+.0001
+            if pad==0: pad=.0001
             ax.set_ylim(mn-pad,mx+pad)
     
+    ax.set_xlabel('t(s)')
     #ax.set_xlim(gb['tstart'],gb['tstart']+WINDOW_T)
     update_axes()
 
@@ -361,9 +403,6 @@ def main(bio):
     gb['WINDOW_SHIFT_T'] =.2 # proportion of the window to shift when we go back and forth in time
 
 
-    gb['qc']={}
-    gb['invalid']= []
-    gb['peaks']= []
     gb['cursor.t']=0
 
 
@@ -374,55 +413,16 @@ def main(bio):
     ##
     ##
 
+    gb['bio']=bio
     chans = bio.find_channels()
-    gb['channels'] = chans
     if not len(chans):
         print("No channels to plot.")
         return
-
-    gb['n.signals']= len(chans)
-    gb['COLORS'] = get_colors(len(chans))
-
-    gb['data'] = {}
-    gb['tmin']=np.Inf
-    gb['tmax']=-np.Inf
-    for c in chans:
-        hdr,vals = bio.get(c)
-        t = bio.get_time(c)
-        gb['tmin']=min([gb['tmin'],min(t)])
-        gb['tmax']=max([gb['tmax'],max(t)])
-        gb['data'][c]={"hdr":hdr,
-                       "vals":vals,
-                       "t":t}
-
-        
+    load_channels(chans)
+    gb['COLORS'] = dict(zip(chans,get_colors(len(chans))))
     
-    #if pc:
-    #    pass
-        #gb['channel'] = pc
-        #gb['t']=bio.get_time(pc)
-        #hdr,dat = bio.get(pc)
-        #gb['SR']=hdr['sampling_frequency']
-        #gb['hdr']=hdr
-
-        # Also make a filtered version
-        #METHOD = 'engzeemod2012'
-        #METHOD = 'neurokit2'
-        #METHOD
-        #print("Filtering ECG signal using {} procedure in neurokit2".format(METHOD))
-        #signal_flt = dat #neurokit2.ecg_clean(dat,sampling_rate=gb['SR'],method=METHOD)
-
-        #sos = butter(15, 3, 'low', fs=gb['SR'], output='sos')
-        #filtd = signal.sosfiltfilt(sos, dat)
-        #gb['filtered']=filtd
-        #gb['raw']=dat
-        #gb['signal']=signal_flt
-
-    #else:
-        #sys.exit(-1)
-
-
-
+    
+        
     # See if there is an existing peak file
 
     # Create the interface
@@ -434,20 +434,7 @@ def main(bio):
 
 
 
-
-
     gb['tstart']=0 # the left edge of the window we're currently showing
-
-    # Current markers
-    gb['mark_in']  =None
-    gb['mark_out'] =None
-
-        
-
-
-    if 'peaks' not in gb:
-        gb['peaks']=[]
-
 
 
     # Build the interface
@@ -480,6 +467,45 @@ def main(bio):
 
 
 
+
+
+
+    menubar = Menu(root)
+
+    filemenu = Menu(menubar, tearoff=0)
+    filemenu.add_command(label="Open", command=lambda : None)
+    filemenu.add_separator()
+    filemenu.add_command(label="Exit", command=quit)
+    menubar.add_cascade(label="File", menu=filemenu)
+
+
+    viewmenu = Menu(menubar, tearoff=0)
+    gb['view.active']={}
+    for chan in gb['channels']:
+        c = lambda x=chan: toggle_channel(x)
+        v = IntVar()
+        v.set(1)
+        viewmenu.add_checkbutton(label=chan, variable=v, onvalue=1, offvalue=0,command=c)
+        gb['view.active'][chan]=v
+        #viewmenu.add_command(label="Show/hide \"{}\"".format(chan),
+        #                     command=c)
+    viewmenu.add_separator()
+    onlyview = Menu(viewmenu, tearoff=0)
+    for chan in gb['channels']:
+        onlyview.add_command(label="\"{}\"".format(chan),
+                             command=lambda x=chan: show_channels([x]) )
+    viewmenu.add_cascade(label="Show only", menu=onlyview)
+    viewmenu.add_command(label="Show all",
+                         command=lambda x=gb['channels']: show_channels(x))
+    menubar.add_cascade(label="View", menu=viewmenu)
+
+    root.config(menu=menubar)
+    #filemenu.add_command(label="Open", command=donothing)
+    #filemenu.add_command(label="Save", command=donothing)
+    #filemenu.add_separator()
+    #filemenu.add_command(label="Exit", command=root.quit)
+    #menubar.add_cascade(label="File", menu=filemenu)
+    
 
 
     # Packing order is important. Widgets are processed sequentially and if there
