@@ -380,7 +380,17 @@ def redraw():
             pad = .025*(mx-mn)#+.0001
             if pad==0: pad=.0001
             ax.set_ylim(mn-pad,mx+pad)
-    
+
+
+
+        if gb['showmarkers'].get():
+
+            bio = gb['bio']
+            for m in bio.get_markers():
+                evs = bio.get_marker(m)
+                for t in evs:
+                    ax.axvline(x=t,color='gray',dashes= (2, 2))
+            
     ax.set_xlabel('t(s)')
     update_axes()
 
@@ -505,6 +515,12 @@ def main(bio):
     viewmenu.add_cascade(label="Show only", menu=onlyview)
     viewmenu.add_command(label="Show all",
                          command=lambda x=gb['channels']: show_channels(x))
+    viewmenu.add_separator()
+    v = IntVar()
+    v.set(1)
+    viewmenu.add_checkbutton(label="Show markers", variable=v, onvalue=1, offvalue=0,command=redraw_all)
+    gb['showmarkers']=v
+    
     menubar.add_cascade(label="View", menu=viewmenu)
 
     root.config(menu=menubar)
