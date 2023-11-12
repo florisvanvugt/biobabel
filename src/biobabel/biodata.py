@@ -201,6 +201,7 @@ class Biodata:
 
 
     # Make changes
+    
     def rename_channel(self,old_id,new_id):
         for hdr,_ in self.channels:
             if hdr['id']==old_id:
@@ -223,11 +224,29 @@ class Biodata:
         return
         
 
+    def crop(self,tfrom=None,tend=None):
+        """ Crop a number of seconds from the beginning or end of all channels. """
+        if tfrom==None and tend==None: return # otherwise it doesn't really make sense eh?
+        if tfrom==None: tfrom=-np.Inf
+        if tend==None: tend=np.Inf
+        newchannels = []
+        for hdr,vals in self.channels:
+            chan = hdr['id']
+            t = self.get_time(chan)
+            tincl = (t>tfrom) & (t<tend)
+            vals = vals[tincl]
+            newchannels.append((hdr,vals))
+        self.channels = newchannels # replace
 
+        # Need to also update the markers!
+        for m in self.markers.keys():
+            mrk = self.markers[m]
+            self.markers[m] = [ t-tfrom for t in mrk
+                                if t>tfrom and t<tend ]
+            # This (also) drops markers that are no longer in the current range
 
+            
     # Marker functionality 
-        
-        
     
     def get_markers(self):
         """ Returns a list of names of markers. """
