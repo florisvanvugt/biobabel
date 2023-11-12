@@ -16,6 +16,14 @@ python3 -m pip install biobabel
 
 
 ## Command line
+
+From the terminal or command prompt, you can use the following commands.
+To show basic info about a file, use:
+
+```
+bioinfo <FILENAME>
+```
+
 To preview a file, use the provided script from the command line:
 
 ```

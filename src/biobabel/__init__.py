@@ -7,8 +7,12 @@ from biobabel.biodata import Biodata
 DATEFORMAT = "%Y/%m/%d %H:%M:%S %Z%z"
 
 
-def display(viewer=False):
+def info():
+    # Display info of a file
+    get_file()
 
+
+def get_file():
     import sys
     import os
     from tkinter import filedialog as fd
@@ -38,6 +42,14 @@ def display(viewer=False):
         
     bio = load(fname)
     bio.print()
+    return bio
+    
+
+
+
+def display(viewer=False):
+
+    bio = get_file()
 
     if viewer:
         import biobabel.viewer as viewer

@@ -32,7 +32,7 @@ def load(fname):
 
     for ch in data.channels:
 
-        print(" {}".format(ch.name))
+        #print(" {}".format(ch.name))
 
         hdr = {
             'id'                :ch.name,

@@ -436,7 +436,7 @@ def main(bio):
     # Create the interface
         
     root = tkinter.Tk()
-    root.wm_title("Physio Peak Picker - {}".format(bio.name))
+    root.wm_title("Biobabel Viewer - {}".format(bio.name))
     root.geometry('{}x{}'.format(window_w,window_h))
     gb['root']=root
 

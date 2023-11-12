@@ -28,6 +28,7 @@ BDF = ["pybdf" ]
 # Command line interface entrypoint scripts
 biobabel = "biobabel:display"
 bioview  = "biobabel:view"
+bioinfo  = "biobabel:info"
 
 [project.urls]
 "Homepage" = "https://github.com/florisvanvugt/biobabel"

@@ -198,19 +198,71 @@ class Biodata:
 
 
 
+
+
+    # Make changes
+    
+    def rename_channel(self,old_id,new_id):
+        for hdr,_ in self.channels:
+            if hdr['id']==old_id:
+                hdr['id']=new_id
+                return
+        print("No channel found with ID {}".format(old_id))
+        return 
+
+
+
+    def update_channel(self,ident,specs):
+        """ Update the header of a particular channel. """
+        for hdr,_ in self.channels:
+            if hdr['id']==ident:
+                for k in specs:
+                    #assert k!="id" # probably not safe to change channel ID that way
+                    hdr[k]=specs[k]
+                return # We're done, there should be only one channel with that ID
+        print("No channel found with ID {}. Nothing updated.".format(ident))
+        return
         
-        
+
+    def crop(self,tfrom=None,tend=None):
+        """ Crop a number of seconds from the beginning or end of all channels. """
+        if tfrom==None and tend==None: return # otherwise it doesn't really make sense eh?
+        if tfrom==None: tfrom=-np.Inf
+        if tend==None: tend=np.Inf
+        newchannels = []
+        for hdr,vals in self.channels:
+            chan = hdr['id']
+            t = self.get_time(chan)
+            tincl = (t>tfrom) & (t<tend)
+            vals = vals[tincl]
+            newchannels.append((hdr,vals))
+        self.channels = newchannels # replace
+
+        # Need to also update the markers!
+        for m in self.markers.keys():
+            mrk = self.markers[m]
+            self.markers[m] = [ t-tfrom for t in mrk
+                                if t>tfrom and t<tend ]
+            # This (also) drops markers that are no longer in the current range
+
+            
+    # Marker functionality 
     
     def get_markers(self):
+        """ Returns a list of names of markers. """
         mrk= list(self.markers.keys())
         mrk.sort()
         return mrk
 
     def get_marker(self,m):
+        """ For a given marker, returns a list of time points stored under that marker. """
         return self.markers.get(m,[])
 
 
 
+
+
+    
         
         
     def save(self,fname):
