@@ -515,14 +515,6 @@ def main(bio):
     #menubar.add_cascade(label="File", menu=filemenu)
     
 
-
-    # Packing order is important. Widgets are processed sequentially and if there
-    # is no space left, because the window is too small, they are not displayed.
-    # The canvas is rather flexible in its size, so we pack it last which makes
-    # sure the UI controls are displayed as long as possible.
-    #toolbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
-    #canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True)
-
     root.protocol("WM_DELETE_WINDOW", on_closing)
 
 
@@ -534,7 +526,6 @@ def main(bio):
 
     make_plot()
     redraw()
-
 
 
     tkinter.mainloop()
