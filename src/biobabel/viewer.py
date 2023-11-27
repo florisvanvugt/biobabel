@@ -287,10 +287,17 @@ def make_plot():
         gb['canvas'].get_tk_widget().destroy()
     except:
         pass
-
-    fig,axs = plt.subplots(gb['n.signals'],1,sharex=True,squeeze=False)
+ 
+    fig = Figure(dpi=gb['DPI'])
+    gs = fig.add_gridspec(gb['n.signals'],1, hspace=0, wspace=0,
+                          left=gb['PADDING'],right=1-gb['PADDING'])
+    axs = gs.subplots(sharex=True,squeeze=False)
     gb['fig']=fig
-    gb['axs']=axs #[0] # the main plot
+    gb['axs']=axs
+
+    #fig,axs = plt.subplots(gb['n.signals'],1,sharex=True,squeeze=False)
+    #gb['fig']=fig
+    #gb['axs']=axs #[0] # the main plot
 
     canvas = FigureCanvasTkAgg(fig, master=gb['root'])  # A tk.DrawingArea.
     canvas.get_tk_widget().pack()
@@ -428,6 +435,10 @@ def main(bio):
 
 
     gb['cursor.t']=0
+
+
+    gb['DPI'] = 100
+    gb['PADDING'] = .05
 
 
 
