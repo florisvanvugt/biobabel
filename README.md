@@ -70,6 +70,9 @@ Currently supported dialects are:
 * TeensyECG (in-house format)
 
 
+Wishlist:
+* OpenXDF? https://pypi.org/project/openxdf/
+
 
 # Development
 
