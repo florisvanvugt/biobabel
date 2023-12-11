@@ -97,7 +97,13 @@ class Biodata:
         hdr,dat = self.get(chid)
         t = np.arange(dat.shape[0])/hdr['sampling_frequency']
         return t
-    
+
+    def get_closest_sample(self,chid,t):
+        """ Find the sample closest in time to the point t """
+        hdr,dat = self.get(chid)
+        idx = round( t * hdr['sampling_frequency'] )
+        if idx<0: return 0
+        return min(dat.shape[0],idx)
 
     def get_duration(self,chid):
         """ Get the duration of a channel in seconds """

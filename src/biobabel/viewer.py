@@ -332,6 +332,11 @@ TARGET_PLOT_POINTS = 2000
 # how many points to actually plot in the current window (approximately)
 # If the truly available data is more than this, we downsample just for display purposes
 
+def closest_sample(t):
+    # Find the closest sample to a given time point
+    return 
+
+
 def redraw():
     
     # Determine drawrange
@@ -348,20 +353,22 @@ def redraw():
 
         t = toplot['t']
         #prep = biodata.preprocessed[ecg_target]
-        tsels = (t>=tmin) & (t<=tmax)
+        fromi,toi = gb['bio'].get_closest_sample(chan,tmin),gb['bio'].get_closest_sample(chan,tmax)
+        #print(fromi,toi)
+    
+        #tsels = (t>=tmin) & (t<=tmax)
 
         gb['cursor'][i] = ax.axvline(x=gb['cursor.t'],lw=1,color='blue',alpha=.9,zorder=99999)
 
         # Plot the actual signal
-        x = t[tsels]
-        y = toplot['vals'][tsels]
-
-        nplot = sum(tsels) ## the number of samples we'd plot if we don't do sub-sampling
+        x = t[fromi:toi]
+        y = toplot['vals'][fromi:toi]
+        nplot = toi-fromi ## the number of samples we'd plot if we don't do sub-sampling
 
         if DO_SUBSAMPLE:
             factor = int(nplot/TARGET_PLOT_POINTS)
             if factor>1:
-                x,y = x[::factor],y[::factor]
+                x,y = scipy.signal.decimate(x,factor),scipy.signal.decimate(y,factor)
 
         pch = '-'
         if nplot<200:

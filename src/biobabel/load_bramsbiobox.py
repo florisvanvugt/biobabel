@@ -36,6 +36,9 @@ def load(fname):
     TIME_DIVIDER = 1000
 
     tcol = 'Time(ms)'
+    for col in tab.columns:
+        if col.find(tcol)>-1:
+            tcol = col
     tab[tcol]=tab[tcol]/TIME_DIVIDER  # express in s
 
     tdur = max(tab[tcol])-min(tab[tcol])
