@@ -51,7 +51,8 @@ def check_window_zoom(t):
 def update_cursor():
     x = gb['cursor.t']
     for c in gb['cursor']:
-        c.set_data([x, x], [0, 1])
+        if c:
+            c.set_data([x, x], [0, 1])
     #gb['cursor.intvl'].set_data([x, x], [0, 1])
 
     #x = gb['cursor.snap.t']
@@ -169,9 +170,10 @@ def load_channels(chans):
         t = bio.get_time(c)
         gb['tmin']=min([gb['tmin'],min(t)])
         gb['tmax']=max([gb['tmax'],max(t)])
-        gb['data'][c]={"hdr":hdr,
-                       "vals":vals,
-                       "t":t}
+        gb['data'][c]={
+            "hdr":hdr,
+            "vals":vals,
+            "t":t}
     #print("Current channels")
     #print(gb['channels'])
     
@@ -340,9 +342,8 @@ def closest_sample(t):
 def redraw():
     
     # Determine drawrange
-    drawrange = (gb['tstart'],gb['tstart']+gb['WINDOW_T'])
-    tmin,tmax = drawrange
-
+    tmin,tmax = (gb['tstart'],gb['tstart']+gb['WINDOW_T'])
+    
     gb['cursor']= [None for _ in range(gb['n.signals']) ]
     
     for i,chan in enumerate(gb['channels']):
@@ -351,24 +352,28 @@ def redraw():
 
         toplot = gb['data'][chan]
 
-        t = toplot['t']
         #prep = biodata.preprocessed[ecg_target]
         fromi,toi = gb['bio'].get_closest_sample(chan,tmin),gb['bio'].get_closest_sample(chan,tmax)
-        #print(fromi,toi)
-    
+        
         #tsels = (t>=tmin) & (t<=tmax)
 
         gb['cursor'][i] = ax.axvline(x=gb['cursor.t'],lw=1,color='blue',alpha=.9,zorder=99999)
 
         # Plot the actual signal
-        x = t[fromi:toi]
-        y = toplot['vals'][fromi:toi]
-        nplot = toi-fromi ## the number of samples we'd plot if we don't do sub-sampling
 
+        factor = 1
         if DO_SUBSAMPLE:
-            factor = int(nplot/TARGET_PLOT_POINTS)
-            if factor>1:
-                x,y = scipy.signal.decimate(x,factor),scipy.signal.decimate(y,factor)
+            factor = int((toi-fromi)/TARGET_PLOT_POINTS)
+            #if factor>1:
+            #    x,y = scipy.signal.decimate(x,factor),scipy.signal.decimate(y,factor)
+
+        
+        x = toplot['t'][fromi:toi:factor]
+        y = toplot['vals'][fromi:toi:factor]
+        nplot = len(x) ## the number of samples we'd plot if we don't do sub-sampling
+
+        #print(tmin,tmax,fromi,toi,min(x),max(x))
+        
 
         pch = '-'
         if nplot<200:
@@ -404,20 +409,15 @@ def redraw():
                 evs = bio.get_marker(m)
                 for t in evs:
                     ax.axvline(x=t,color='gray',dashes= (2, 2))
-            
+
+    ax.set_xlim(tmin,tmax)
     ax.set_xlabel('t(s)')
-    update_axes()
-
-
-def update_axes():
-    axs = gb['axs']
-    tend = gb['tstart']+gb['WINDOW_T']
-    gb['slider'].set(int(gb['tstart']/gb['WINDOW_T']))
-
-    axs[0][0].set_xlim(gb['tstart'],tend) # just by setting one the others should be linked hence follow
-        
-    plt.tight_layout()
     gb['canvas'].draw()
+    gb['slider'].set(int(tmin/gb['WINDOW_T']))
+    #plt.tight_layout()
+    #update_axes()
+
+
     
 
 def get_colors(N):

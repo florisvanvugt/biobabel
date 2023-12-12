@@ -47,8 +47,9 @@ def load(fname):
     print("-- A human may want to inspect this:")
     print("Time step values (in s) min={:.5f}, max={:.5f}, mean={:.5f}, median={:.5f}, SD={:.5f}".format(
         np.min(dt),np.max(dt),np.mean(dt),mediandt,np.std(dt)))
-    THRESH = mediandt*1.1
-    print("# of time steps >.{}: {}".format(THRESH,np.sum(dt>THRESH)))
+    THRESH = mediandt*1.2
+    nover,overprop = np.sum(dt>THRESH),np.mean(dt>THRESH)
+    print("# of time steps > {}: {} ({:.4f} %)".format(THRESH,nover,overprop*100))
     print("----")
     print()
 
@@ -60,7 +61,7 @@ def load(fname):
         nm = col
         if col in col_info: nm=col_info[nm]
 
-        if nm=='t': continue
+        if nm==tcol: continue # drop the time column
 
         hdr = {
             'id'                :col,
@@ -68,7 +69,7 @@ def load(fname):
             'sampling_frequency':SR,
             'modality'          :nm,
             'units'             :'V'}
-        data = 3.3 * (np.array(tab[col]) / 1023)
+        data = 3.3 * (np.array(tab[col]) / 1023) # express values as Voltage
         bio.add_channel((hdr,data))
 
     return bio
