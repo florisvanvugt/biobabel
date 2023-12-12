@@ -5,11 +5,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "biobabel"
-version = "0.0.1"
+version = "0.5.6"
 authors = [
   { name="Floris van Vugt", email="ftvanvugt@gmail.com" },
 ]
-description = "Python package for reading major bio/physiology data formats (e.g. ECG, PPG, EDA)"
+description = "Python wrapper for reading major bio/physiology data formats (e.g. ECG, PPG, EDA) into a unified accessible interface"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
@@ -17,10 +17,29 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "h5py",
+  "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas","pyedflib","scipy"
 ]
+
+[project.optional-dependencies]
+BDF = ["pybdf" ]
+# pyBDF seemed problematic under Anaconda, so it is made optional
+
+[project.scripts]
+# Command line interface entrypoint scripts
+biobabel = "biobabel:display"
+bioview  = "biobabel:view"
+bioinfo  = "biobabel:info"
 
 [project.urls]
 "Homepage" = "https://github.com/florisvanvugt/biobabel"
+
+
+
+# To upload a package to PyPI:
+# Sitting in the package root directory
+#   python3 -m build
+# creates dist/... stuff
+# Uploading
+#   python3 -m twine upload dist/*
 
 
