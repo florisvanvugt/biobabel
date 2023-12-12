@@ -16,6 +16,9 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+  "h5py",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/florisvanvugt/biobabel"
