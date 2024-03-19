@@ -105,8 +105,15 @@ class Biodata:
         if idx<0: return 0
         return min(dat.shape[0],idx)
 
-    def get_duration(self,chid):
+
+    
+    def get_duration(self,chid=None):
         """ Get the duration of a channel in seconds """
+        if chid==None: # If no channel is given, return maximum duration of all channels
+            chids = self.find_channels()
+            d = [ self.get_duration(c) for c in chids ]
+            return np.max(d)
+        
         hdr,dat  = self.get(chid)
         SR       = hdr['sampling_frequency']
         nsamp    = dat.shape[0]
@@ -251,6 +258,31 @@ class Biodata:
                                 if t>tfrom and t<tend ]
             # This (also) drops markers that are no longer in the current range
 
+
+    def copy(self):
+        """ Create a deep copy of oneself """
+        
+        bio = Biodata() # create a new biodata object
+
+        # This file is included in bioread
+        #data = bioread.read_file(fname)
+
+        bio.name = self.name
+        bio.meta = self.meta.copy()
+
+        for (ch,dat) in self.channels:
+            bio.add_channel((ch.copy(),dat.copy()))
+            
+        bio.markers = {}
+        for m in self.get_markers():
+            bio.markers[m] = list(self.get_marker(m))
+
+        return bio
+        
+
+
+
+            
             
     # Marker functionality 
     

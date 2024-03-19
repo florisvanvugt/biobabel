@@ -29,6 +29,7 @@ BDF = ["pybdf" ]
 biobabel = "biobabel:display"
 bioview  = "biobabel:view"
 bioinfo  = "biobabel:info"
+biosplit = "biobabel:split"
 
 [project.urls]
 "Homepage" = "https://github.com/florisvanvugt/biobabel"
