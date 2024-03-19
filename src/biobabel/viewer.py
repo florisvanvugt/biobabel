@@ -366,7 +366,7 @@ def redraw():
             factor = int((toi-fromi)/TARGET_PLOT_POINTS)
             #if factor>1:
             #    x,y = scipy.signal.decimate(x,factor),scipy.signal.decimate(y,factor)
-
+        if factor<1: factor=1
         
         x = toplot['t'][fromi:toi:factor]
         y = toplot['vals'][fromi:toi:factor]
