@@ -30,6 +30,7 @@ biobabel = "biobabel:display"
 bioview  = "biobabel:view"
 bioinfo  = "biobabel:info"
 biosplit = "biobabel:split"
+tohdf5   = "biobabel:tohdf5"
 
 [project.urls]
 "Homepage" = "https://github.com/florisvanvugt/biobabel"

@@ -79,6 +79,15 @@ def guess_modality(nm):
 
 
 
+def tohdf5():
+    """ Split a file according to its markers """
+    bio = get_file() # attempt to get a file name to work on
+    fname = bio.meta['filename']
+    import os
+    fbase,ext = os.path.splitext(fname)
+    targetf = '{}.hdf5'.format(fbase)
+    bio.save(targetf)
+    print("Saved to {}".format(targetf))
 
 
 
