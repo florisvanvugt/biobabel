@@ -85,15 +85,15 @@ For a full demonstration, see the [basic documentation](https://github.com/flori
 
 At the time of writing the following data formats are supported:
 
-| Format                              | File extension(s) | Supported by                                                        |
-|:-----------------------------------:|:-----------------:|:------------------------------------------------------------------:|
-| Extensible Data Format              | .xdf              | [pyxdf](https://pypi.org/project/pyxdf/)                           |
-| BIOSEMI 24-bit BDF                  | .bdf              | [pybdf](https://pypi.org/project/pybdf/)                           |
-| BioPAC Acknowledge                  | .acq              | [bioread](https://pypi.org/project/bioread/)                       |
-| OpenSignals (r)evolution / BiTalino | .txt              | [opensignalsreader](https://github.com/PGomes92/opensignalsreader) |
-| European Data Format                | .edf              | [pyedflib](https://pyedflib.readthedocs.io/en/latest/)             |
-| Generic CSV                         | .csv              | Custom developed code including sniffing and educated guesses      |
-| hdphysio5                           | .hdf5             | Native format developed specifically for biobabel                  |
+| Format                              | File extension | Supported by                                                       |
+|:-----------------------------------:|:--------------:|:------------------------------------------------------------------:|
+| Extensible Data Format              | .xdf           | [pyxdf](https://pypi.org/project/pyxdf/)                           |
+| BIOSEMI 24-bit BDF                  | .bdf           | [pybdf](https://pypi.org/project/pybdf/)                           |
+| BioPAC Acknowledge                  | .acq           | [bioread](https://pypi.org/project/bioread/)                       |
+| OpenSignals (r)evolution / BiTalino | .txt           | [opensignalsreader](https://github.com/PGomes92/opensignalsreader) |
+| European Data Format                | .edf           | [pyedflib](https://pyedflib.readthedocs.io/en/latest/)             |
+| Generic CSV                         | .csv           | Custom developed code including sniffing and educated guesses      |
+| hdphysio5                           | .hdf5          | Native format developed specifically for biobabel                  |
 
 The format of input files is guessed automatically at the time of reading, using clues such as file extension, but if these are insufficiently informative, guesses are made based on sniffing of the file. For some file formats, such as CSV, the way these formats are used varies between research groups: CSV data represents a table but the meaning and names of various columns in this table are not standardized. In those cases, `biobabel` will try to guess the meaning of the various columns, for example automatically guessing one column to be a time column if its values are increasing almost always by the same amount.
 
@@ -191,7 +191,7 @@ The following shell scripts are currently included and available automatically i
 
 ## Integration with biosignals processing packages
 
-Since `biobabel` takes care of all the peculiarities of data files, physiological processing pipelines can be substantially simplified. The following boilerplate code reads a data file and automatically finds the ECG columns and preprocesses the data using third-party library `neurokit2`:
+Since `biobabel` takes care of all the peculiarities of data files, physiological processing pipelines can be substantially simplified. The following boilerplate code reads a data file and automatically finds the ECG columns and preprocesses the data using the excellent Python package `neurokit2` [@Makowski2021]:
 
 ```python
 import neurokit2
@@ -199,7 +199,8 @@ import biobabel as bb
 x = bb.load('dataset_copy.hdf5')
 prep = {}
 for hdr,signal in x.find({'modality':'ecg'}):
-    prep[hdr['id']] = neurokit2.ecg_process(signal,sampling_rate=hdr['sampling_frequency'])
+    prep[hdr['id']] = neurokit2.ecg_process(
+	    signal,sampling_rate=hdr['sampling_frequency'])
 ```
 
 
@@ -211,13 +212,13 @@ This code works without modifications for any of the supported data formats.
 
 At the time of writing, `biobabel` is already being used at the [Human Connection Science Lab](https://connectionscience.org/) and the [International Laboratory for Brain, Music and Sound Research (BRAMS)](https://brams.org). 
 
-It is hoped that `biobabel` will simplify the lives of scientists by abstracting away from the specifics of file formats. Using this package, data processing pipelines can be homogenized across research groups relying on different sensors, increasing much needed reproducibility. 
+It is hoped that `biobabel` will simplify the lives of scientists by abstracting away from the specifics of physiology file formats. Using this package, data processing pipelines can be more easily shared across research groups that rely on different sensors, thus contributing towards greater reproducibility in our field. 
 
 
 
 # Acknowledgements
 
-Mihaela Felezeu and Alex Nieva at BRAMS provided helpful tutorials on using all manners of biosignals. Inspiration for `biobabel` was taken from [`nibabel`](https://nipy.org/nibabel/) which is a Python library able to read virtually any neuroimaging file format in the known universe, and making it available in a unified Python interface [@nibabel]. `biobabel` also builds on the strengths of a range of packages such as `matplotlib` [@matplotlib], `numpy` [@numpy] and `pandas` [@pandas]. We thank the contributors of all those packages for their excellent work.
+Mihaela Felezeu and Alex Nieva at BRAMS provided helpful tutorials on using all manners of biosignals. Inspiration for `biobabel` was taken from [`nibabel`](https://nipy.org/nibabel/) which is a Python library able to read virtually any neuroimaging file format in the known universe, and making it available in a unified Python interface [@nibabel]. `biobabel` also builds on the strengths of a range of packages such as `matplotlib` [@matplotlib], `numpy` [@numpy] and `pandas` [@pandas]. I want to thank the contributors of all those packages for their excellent work.
 
 
 
