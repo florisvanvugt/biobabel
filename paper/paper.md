@@ -218,6 +218,8 @@ It is hoped that `biobabel` will simplify the lives of scientists by abstracting
 
 # Acknowledgements
 
+This work was supported by a pilot project grant from the *Centre Interdisciplinaire de Recherche sur le Cerveau et l'Apprentissage* (CIRCA), Montreal, QC, Canada.
+
 Mihaela Felezeu and Alex Nieva at BRAMS provided helpful tutorials on using all manners of biosignals. Inspiration for `biobabel` was taken from [`nibabel`](https://nipy.org/nibabel/) which is a Python library able to read virtually any neuroimaging file format in the known universe, and making it available in a unified Python interface [@nibabel]. `biobabel` also builds on the strengths of a range of packages such as `matplotlib` [@matplotlib], `numpy` [@numpy] and `pandas` [@pandas]. I want to thank the contributors of all those packages for their excellent work.
 
 
