@@ -12,7 +12,7 @@ def load(fname):
 
     """ Load LSL format XDF file. """
     
-    print("ATTENTION, this is a very case-specific script.")
+    print("ATTENTION, this is a somewhat case-specific script.")
     print("It might not work in general to read XDF files.")
     print("Make sure you know what you are doing if you proceed here.")
 
@@ -28,10 +28,9 @@ def load(fname):
     participants.sort()
     bio.participants = participants
 
-    # Determine the common onset 
+    # Determine the common time onset of signals, so that we can then crop to that. 
     ONSET_T, N_SAMP = get_onset(streams)
 
-    
     for s in streams:
         info = s['info']
         print(" {} {}".format(info['name'][0],info['type'][0]))

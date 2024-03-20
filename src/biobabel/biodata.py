@@ -54,13 +54,25 @@ class Biodata:
             newid = "{}.{}".format(ident,cnt)
         return newid
 
+    
     def add_channel(self,hdrdat):
-        """ Add the channel with specified header information and data """
-
-        hdr,dat = hdrdat
-        newid = hdr['id'].replace('/','_') # slashes don't work because HDF5 gets confused
-        hdr['id']=self.uniquefy(newid) # make the ID unique in case it already exists
+        """ 
+        Add the channel with specified header information and data.
+        hdrdat is a tuple (hdr,dat) where hdr is a dict containing the
+        header and dat is the data stream itself (a one-dimensional array).
+        """
+        hdr,dat   = hdrdat
+        newid     = hdr['id'].replace('/','_') # slashes don't work because HDF5 gets confused
+        hdr['id'] = self.uniquefy(newid) # make the ID unique in case it already exists
         self.channels.append((hdr,dat))
+
+
+    def find(self,crit={}):
+        """ Find all channels that satisfy the metadata criteria and return them as (hdr,dat) """
+        return [ self.get(ch) for ch in self.find_channels(crit) ]
+            
+            
+        
         
     def find_channels(self,crit={}):
         """ Find the channel id's satisfying certain criteria """
@@ -126,13 +138,15 @@ class Biodata:
         """ Return a summary of the current data (in str format) """
         ret = "Summary of {}\n".format(self.name)
         ret += self.summarize_meta()+"\n"
-        if self.date:
+        if self.date and 'date' not in self.meta:
             ret += '[ date : {} ]\n'.format(self.date)
+
         for p in self.get_participants():
-            ret += "\nParticipant '{}'\n".format(p)
+            ret += "Participant '{}'\n".format(p)
             chans = self.find_channels({"participant":p})
             for chan in chans:
                 ret += "∟ {}\n".format(self.summarize_channel(chan))
+            ret += "\n"
 
         if len(self.markers):
             ret += "\nMarkers:\n"
@@ -172,11 +186,21 @@ class Biodata:
 
     
 
-    def plot(self,figsize=(12,7)):
+    def plot(self,channels=None,figsize=(12,7)):
+        """ 
+        Produce a simple inspection plot of the entirety of the data. 
+        The channels argument can indicate a channel or a list of channels to be plotted.
+        """
 
         import matplotlib.pyplot as plt
 
         chans = self.find_channels()
+        if channels:
+            if isinstance(channels,str):
+                chans = [channels]
+            else:
+                chans = channels # assume it is a list
+                
         if not len(chans):
             print("No channels to plot.")
             return
@@ -199,10 +223,10 @@ class Biodata:
             ax.plot(t,vals,color=col)
             ax.set_title(chan)
 
-        for m in self.get_markers():
-            evs = self.get_marker(m)
-            for t in evs:
-                ax.axvline(x=t)
+            for m in self.get_markers():
+                evs = self.get_marker(m)
+                for t in evs:
+                    ax.axvline(x=t,dashes=[2,2],color='gray')
 
         if self.name:
             plt.suptitle(self.name)
@@ -311,14 +335,11 @@ class Biodata:
         
         bio = Biodata() # create a new biodata object
 
-        # This file is included in bioread
-        #data = bioread.read_file(fname)
-
         bio.name = self.name
         bio.meta = self.meta.copy()
 
         for (ch,dat) in self.channels:
-            bio.add_channel((ch.copy(),dat.copy()))
+            bio.channels.append( (ch.copy(),dat.copy()) )
             
         bio.markers = {}
         for m in self.get_markers():
@@ -343,10 +364,14 @@ class Biodata:
         """ For a given marker, returns a list of time points stored under that marker. """
         return self.markers.get(m,[])
 
+    def add_marker(self,m,timepoints):
+        """ Add a marker with a given label m and set of time points """
+        if isinstance(timepoints,float):
+            timepoints = [timepoints]
+        self.markers[m] = timepoints
 
-
-
-
+    def clear_markers(self):
+        self.markers = {}
     
 
 

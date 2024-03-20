@@ -11,7 +11,7 @@ bio.meta['date']=time.strftime("%m/%d/%Y %H:%M:%S %Z%z")
 SR = 1000
 ecgA = nk.ecg_simulate(duration=15, sampling_rate=SR, heart_rate=80)
 hdr = {
-    'id'                :'a-ecg',
+    'id'                :'a_ecg',
     'participant'       :'a',
     'sampling_frequency':SR,
     'modality'          :'ecg',
@@ -21,7 +21,7 @@ bio.add_channel((hdr,ecgA))
 
 ecgB = nk.ecg_simulate(duration=15, sampling_rate=SR, heart_rate=75)
 hdr = {
-    'id'                :'b-ecg',
+    'id'                :'b_ecg',
     'participant'       :'b',
     'sampling_frequency':SR,
     'modality'          :'ecg',
@@ -31,7 +31,7 @@ bio.add_channel((hdr,ecgB))
 
 ppg = nk.ppg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
 hdr = {
-    'id'                :'a-ppg',
+    'id'                :'a_ppg',
     'participant'       :'a',
     'sampling_frequency':SR,
     'modality'          :'ppg',
@@ -39,9 +39,15 @@ hdr = {
 }
 bio.add_channel((hdr,ppg))
 
+bio.add_marker('bingo',[3,3.8,4.5])
+
+
 bio.save('example.hdf5')
 
 
 dat = bb.load('example.hdf5')
 dat.print()
 dat.plot()
+#dat.save('example2.hdf5')
+
+#dat.print()

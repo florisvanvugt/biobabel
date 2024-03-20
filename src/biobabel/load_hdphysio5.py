@@ -31,9 +31,19 @@ def load(fname):
         
     participants = hf.attrs['participants']
 
+    # Check if the channel names are already unique
+    names = []
+    uniquenames = True
     for p in participants:
         for ch in hf[p].keys():
-            nm = "{}/{}".format(p,ch)
+            if ch in names:
+                uniquenames = False
+            else:
+                names.append(ch)
+            
+    for p in participants:
+        for ch in hf[p].keys():
+            nm = "{}/{}".format(p,ch) if not uniquenames else ch
             dset = hf[p][ch]
             SR = dset.attrs['SR']
             mod = dset.attrs['modality']
