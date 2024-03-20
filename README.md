@@ -59,7 +59,7 @@ Simple usage example in Python:
 
 ```
 import biobabel
-bio = biobabel.load('filename.txt')
+bio = biobabel.load('tests/example.hdf5')
 bio.print()
 bio.plot()
 bio.save('new_filename.hdf5')
@@ -84,9 +84,6 @@ Currently supported dialects are:
 * hdphysio5 thanks to [hdphysio5](https://github.com/florisvanvugt/hdphysio5)
 * TeensyECG (in-house format)
 
-
-Wishlist:
-* OpenXDF? https://pypi.org/project/openxdf/
 
 
 # Development
