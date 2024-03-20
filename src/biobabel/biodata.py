@@ -172,7 +172,7 @@ class Biodata:
 
     
 
-    def plot(self):
+    def plot(self,figsize=(12,7)):
 
         import matplotlib.pyplot as plt
 
@@ -189,7 +189,7 @@ class Biodata:
 
         COLORS = get_colors(len(chans))
 
-        f,axs =plt.subplots(len(chans),1,sharex=True,figsize=(12,7),squeeze=False)
+        f,axs =plt.subplots(len(chans),1,sharex=True,figsize=figsize,squeeze=False)
 
         for i,chan in enumerate(chans):
             ax = axs[i][0]
@@ -215,7 +215,7 @@ class Biodata:
 
     # Make changes
     
-    def rename_channel(self,old_id,new_id):
+    def rename(self,old_id,new_id):
         for hdr,_ in self.channels:
             if hdr['id']==old_id:
                 hdr['id']=new_id
@@ -259,6 +259,53 @@ class Biodata:
             # This (also) drops markers that are no longer in the current range
 
 
+    def drop(self,what):
+        """ Drop channels. Provide an ID or a list of IDs for the channels to be dropped. """
+
+        if isinstance(what,str):
+            # Assume that this is the ID of the channel we want to drop so drop it
+            self.channels = [ (hdr,vals) for (hdr,vals) in self.channels if hdr['id']!=what ]
+
+        if isinstance(what,list):
+            # Assume that this is a list of IDs of the channel we want to drop so drop them
+            self.channels = [ (hdr,vals) for (hdr,vals) in self.channels if hdr['id'] not in what ]
+
+        return self
+    
+
+
+    def select(self,what):
+        """ Select only some channels and drop the others. 
+        Provide an ID or a list of IDs for the channels to be retained. """
+
+        if isinstance(what,str):
+            # Assume that this is the ID of the channel we want to drop so drop it
+            self.channels = [ (hdr,vals) for (hdr,vals) in self.channels if hdr['id']==what ]
+
+        if isinstance(what,list):
+            # Assume that this is a list of IDs of the channel we want to drop so drop them
+            self.channels = [ (hdr,vals) for (hdr,vals) in self.channels if hdr['id'] in what ]
+
+        if isinstance(what,dict):
+            # Assume that this is a dictionary of metadata to characterize the channels you want to keep.
+            # e.g. select({"participant":"a"}) means we only keep the data from participant "a".
+            newchan = []
+            for (hdr,vals) in self.channels:
+                keep = True
+                for k in what:
+                    if hdr[k]!=what[k]:
+                        keep = False
+                if keep:
+                    newchan.append((hdr,vals))
+            self.channels = newchan
+
+        return self
+            
+
+            
+
+            
+
     def copy(self):
         """ Create a deep copy of oneself """
         
@@ -301,7 +348,15 @@ class Biodata:
 
 
     
-        
+
+
+
+    #
+    #
+    #
+    # Input/output
+    #
+    #
         
     def save(self,fname):
         """
