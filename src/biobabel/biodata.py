@@ -41,9 +41,26 @@ class Biodata:
         #return '\n'.join([ "· {}={}".format(k,self.meta[k]) for k in self.meta ])
         
     def add_meta(self,k,v):
+        """ 
+        Add metadata.
+
+        k : the metadata key 
+        v : the metadata value
+
+        Example:
+        biodata.add_meta('date','2024-03-22')
+        """
         self.meta[k]=v
 
     def uniquefy(self,ident):
+        """
+        Return a channel id that is unique (does not exist yet), 
+        as close as possible to the given id.
+
+        ident : the id to start from
+
+        If ident is already unique, it will be returned.
+        """
         ids = self.find_channels()
         if ident not in ids:
             return ident
@@ -58,7 +75,8 @@ class Biodata:
     def add_channel(self,hdrdat):
         """ 
         Add the channel with specified header information and data.
-        hdrdat is a tuple (hdr,dat) where hdr is a dict containing the
+
+        hdrdat : is a tuple (hdr,dat) where hdr is a dict containing the
         header and dat is the data stream itself (a one-dimensional array).
         """
         hdr,dat   = hdrdat
@@ -88,6 +106,7 @@ class Biodata:
 
 
     def get_participants(self):
+        """ Return a list of participants in the current object """
         part = []
         for hdr,_ in self.channels:
             p= hdr.get('participant',None)
@@ -97,7 +116,7 @@ class Biodata:
         return part
 
     def get(self,chid):
-        # Get a particular channel data
+        """ Get a particular channel data """
         for hdr,dat in self.channels:
             if hdr.get('id',None)==chid:
                 return hdr,dat

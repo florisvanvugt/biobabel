@@ -8,11 +8,20 @@ DATEFORMAT = "%Y/%m/%d %H:%M:%S %Z%z"
 
 
 def info():
-    # Display info of a file
+    """
+    Display quick information about a given file.
+    """
     get_file()
 
 
 def get_file():
+    """
+    Figure out which file wants to be opened.
+    First check the command line if a file was indicated.
+    If not, show a file selection dialog window to allow
+    the user to select one.
+    Open the file, and then print a summary.
+    """
     import sys
     import os
     from tkinter import filedialog as fd
@@ -48,11 +57,16 @@ def get_file():
 
 
 
-def display(viewer=False):
+def display(advanced=False):
+    """ 
+    Produce a quick plot of a file.
+    
+    advanced : if True, show the advanced viewer (TK GUI) otherwise show a simple matplotlib 
+    """
 
     bio = get_file()
 
-    if viewer:
+    if advanced:
         import biobabel.viewer as viewer
         viewer.main(bio)
 
@@ -63,13 +77,17 @@ def display(viewer=False):
 
 
 def view():
-    display(viewer=True)
+    """ Display advanced viewer of a given data file. """
+    display(advanced=True)
 
 
 
 
 def guess_modality(nm):
-    """ Guess the modality from the label of a signal column """
+    """ 
+    Guess the modality (e.g. ECG) from the 
+    label of a signal column.
+    """
     l = nm.lower()
     for mod in ['ecg','eda','gsr','ppg']:
         if l.find(mod)>-1:
