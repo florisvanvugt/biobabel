@@ -19,21 +19,21 @@ tags:
   - Python
 authors:
   - given-names: Floris Tijmen
-    non-dropping-particle: van
+	non-dropping-particle: van
 	surname: Vugt
-    orcid: 0000-0003-1739-0175 
-    affiliation: "1, 2, 3, 4, 5"
+	orcid: 0000-0003-1739-0175
+	affiliation: "1, 2, 3, 4, 5"
 affiliations:
   - name: Department of Psychology, University of Montreal, Montreal, Canada
-    index: 1
+	index: 1
   - name: International Laboratory for Brain, Music and Sound Research (BRAMS), Montreal, Canada
-    index: 2
+	index: 2
   - name: Centre for Research on Brain, Language and Music (CRBLM), Montreal, QC, Canada
-    index: 3
+	index: 3
   - name: Centre Interdisciplinaire de Recherche sur le Cerveau et l'Apprentissage (CIRCA), Montreal, QC, Canada
-    index: 4
+	index: 4
   - name: Haskins Laboratories, Yale University, New-Haven CT, USA	
-    index: 5
+	index: 5
 date: 20 March 2024
 bibliography: paper.bib
 
