@@ -40,17 +40,22 @@ class Biodata:
             return ""
         #return '\n'.join([ "· {}={}".format(k,self.meta[k]) for k in self.meta ])
         
-    def add_meta(self,k,v):
+    def add_meta(self,k,v,replace=True):
         """ 
         Add metadata.
 
         k : the metadata key 
         v : the metadata value
+        replace : if true, replace any existing metadata key value, otherwise add a new key
 
         Example:
         biodata.add_meta('date','2024-03-22')
         """
-        self.meta[k]=v
+        kk = k
+        if not replace:
+            while kk in self.meta:
+                kk += "'"
+        self.meta[kk]=v
 
     def uniquefy(self,ident):
         """
@@ -395,6 +400,38 @@ class Biodata:
 
 
 
+
+    #
+    #
+    #
+    # Merge
+    #
+    #
+    #
+    def merge(self,other):
+        """
+        Merge data from another biodata object into the current object.
+
+        other : the object to be merged into the current object
+        """
+
+        # Copy metadata
+        for k in other.meta:
+            self.add_meta(k,other.meta[k],replace=False)
+
+        # Copy data
+        for hdr,dat in other.channels:
+            self.add_channel((hdr,dat))
+
+        # Copy markers
+        for m in other.get_markers():
+            self.add_marker(m,other.get_marker(m))
+        
+        # Done!
+        return self
+        
+
+            
     #
     #
     #

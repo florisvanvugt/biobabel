@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "biobabel"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="Floris van Vugt", email="ftvanvugt@gmail.com" },
 ]
@@ -30,6 +30,7 @@ biobabel = "biobabel:display"
 bioview  = "biobabel:view"
 bioinfo  = "biobabel:info"
 biosplit = "biobabel:split"
+biomerge = "biobabel:merge"
 tohdf5   = "biobabel:tohdf5"
 
 [project.urls]

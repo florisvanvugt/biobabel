@@ -6,6 +6,8 @@ from biobabel.biodata import Biodata
 
 DATEFORMAT = "%Y/%m/%d %H:%M:%S %Z%z"
 
+import sys
+
 
 def info():
     """
@@ -22,7 +24,6 @@ def get_file():
     the user to select one.
     Open the file, and then print a summary.
     """
-    import sys
     import os
     from tkinter import filedialog as fd
 
@@ -77,7 +78,9 @@ def display(advanced=False):
 
 
 def view():
-    """ Display advanced viewer of a given data file. """
+    """ 
+    Display advanced viewer of a given data file. 
+    """
     display(advanced=True)
 
 
@@ -148,4 +151,39 @@ def split():
             sub.save(targetf)
             
         tprev = t
+    
+
+
+
+
+
+def merge():
+    """ 
+    Merge multiple files into a single file.
+    This assumes data from the channels in the input files are all synchronous.
+    """
+
+    if len(sys.argv)<3:
+        print("Usage: biomerge <FILE1> <FILE2> ... <OUTPUT_FILE>")
+        print("Need at least two input files")
+        sys.exit(-1)
+
+    outf = sys.argv[-1]
+    infs = sys.argv[1:-1]
+
+    print("Input files: {}".format(",".join(infs)))
+    print("Output file: {}".format(outf))
+
+    inputs = []
+    for inf in infs:
+        bio = load(inf)
+        inputs.append(bio)
+
+
+    merged = Biodata() # create a new object
+    for bio in inputs:
+        merged.merge(bio)
+
+    merged.print()
+    merged.save(outf)
     

@@ -44,6 +44,10 @@ To split a file into multiple files along the marker time series (this will crea
 biosplit <FILENAME>
 ```
 
+To merge multiple files into a single output file (assuming that all channels have the same time onset):
+```
+biomerge <FILE1> <FILE2> ... <OUTPUT_FILE>
+```
 
 To convert a file to HDF5:
 
