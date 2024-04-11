@@ -269,6 +269,10 @@ class Biodata:
                         if t>=tmin and t<=tmax:
                             ax.axvline(x=t,dashes=[2,2],color='gray')
 
+            # Simplify axes
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+                            
         if self.name:
             plt.suptitle(self.name)
         plt.tight_layout()
