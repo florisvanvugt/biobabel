@@ -31,6 +31,7 @@ bioview  = "biobabel:view"
 bioinfo  = "biobabel:info"
 biosplit = "biobabel:split"
 biomerge = "biobabel:merge"
+biohtml  = "biobabel:html_report"
 tohdf5   = "biobabel:tohdf5"
 
 [project.urls]

@@ -38,6 +38,14 @@ biobabel <FILENAME>
 
 You can omit `<FILENAME>` in which case you will be prompted to select a file you want to preview.
 
+
+To turn one or multiple files into an HTML rendition:
+```
+biohtml <FILENAME(s)>
+```
+
+
+
 To split a file into multiple files along the marker time series (this will create `<FILENAME_001>`, `<FILENAME_002>` etc.:
 
 ```

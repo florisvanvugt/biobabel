@@ -210,10 +210,17 @@ class Biodata:
 
     
 
-    def plot(self,channels=None,figsize=(12,7)):
+    def plot(self,channels=None,figsize=(12,7),timerange=None,show=True,markers=True):
         """ 
         Produce a simple inspection plot of the entirety of the data. 
         The channels argument can indicate a channel or a list of channels to be plotted.
+
+        channels  : the channel ids for the data you want to plot
+        figsize   : the desired figure size in inches (as specified by matplotlib)
+        timerange : a tuple indicating the start and end times of the desired plot time range, or None to plt all
+        show      : whether to call plot.show() or not when completed
+        markers   : whether to draw tempoeral position of embedded markers
+        
         """
 
         import matplotlib.pyplot as plt
@@ -243,22 +250,70 @@ class Biodata:
             ax = axs[i][0]
             hdr,vals = self.get(chan)
             t = self.get_time(chan)
+            tmin,tmax = -np.Inf,np.Inf
+            if timerange:
+                (tmin,tmax) = timerange
+            tsels = (t>=tmin) & (t<=tmax)
+            if sum(tsels)==0: continue
+            t    = t[tsels]
+            vals = vals[tsels]
+            
             col = COLORS[i]
             ax.plot(t,vals,color=col)
             ax.set_title(chan)
 
-            for m in self.get_markers():
-                evs = self.get_marker(m)
-                for t in evs:
-                    ax.axvline(x=t,dashes=[2,2],color='gray')
+            if markers:
+                for m in self.get_markers():
+                    evs = self.get_marker(m)
+                    for t in evs:
+                        if t>=tmin and t<=tmax:
+                            ax.axvline(x=t,dashes=[2,2],color='gray')
 
         if self.name:
             plt.suptitle(self.name)
         plt.tight_layout()
-        plt.show()
+        if show:
+            plt.show()
+
+        return f
+
+    
+
+
+    def html_report(self):
+        """ Return a simple quick-and-dirty HTML rendition of the data """
+        import base64
+        import io
+        import matplotlib.pyplot as plt
+
+        html = ""
+        html += self.summary().replace('\n','<br />\n')
+
+        # Decide which time ranges to plot
+        tranges = [None] # this will in either case plot the whole file
+
+        MINI_WINDOW_SIZE = 15
+        dur = self.get_duration()
+        if dur>3*MINI_WINDOW_SIZE:
+            tranges.append( (0,MINI_WINDOW_SIZE) )
+            hd = (dur/2) - .5*MINI_WINDOW_SIZE
+            tranges.append( (hd, hd+MINI_WINDOW_SIZE) )
+            tranges.append( (dur-MINI_WINDOW_SIZE,dur) )
+        
+        for trange in tranges:
+            f = self.plot(timerange=trange,show=False,markers=(trange!=None))
+            pic_IObytes = io.BytesIO()
+            plt.savefig(pic_IObytes,  format='jpg')
+            pic_IObytes.seek(0)
+            b64 = base64.b64encode(pic_IObytes.read())
+            html += '<p><img src="data:image/jpeg;base64,{}"></p>'.format(b64.decode('utf-8'))
+            plt.close()
+
+        return html
 
 
 
+        
 
 
     # Make changes

@@ -187,3 +187,35 @@ def merge():
     merged.print()
     merged.save(outf)
     
+
+
+
+
+
+
+
+def html_report():
+    """
+    Create an easy report of a whole series of files at once.
+    """
+
+    if len(sys.argv)<2:
+        print("Usage: bioreport <FILES>")
+        sys.exit(-1)
+    
+    infs = sys.argv[1:]
+    print("Input files: {}".format(",".join(infs)))
+
+    html = ""
+    for inf in infs:
+        print()
+        print("==> {}".format(inf))
+        bio = load(inf)
+        h = bio.html_report()
+        html += "<h1>{}</h1><p>{}</p>".format(inf,h)
+        
+    with open('report.html','w') as f:
+        f.write(html)
+
+
+        
