@@ -192,6 +192,43 @@ def merge():
 
 
 
+HTML_CSS_STYLE = """
+
+.sidenav {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1; 
+  top: 0; 
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden; 
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 200px; /* Same as the width of the sidebar */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+"""
 
 
 def html_report():
@@ -212,10 +249,40 @@ def html_report():
         print("==> {}".format(inf))
         bio = load(inf)
         h = bio.html_report()
-        html += "<h1>{}</h1><p>{}</p>".format(inf,h)
+        html += "<h1><a id=\"{}\">{}</a></h1><p>{}</p>".format(inf,inf,h)
+
+
+    ## Add header
+
+    links = [ "<a href=\"#{}\">{}</a>".format(inf,inf) for inf in infs ]
+    
+    final = """
+<html>
+
+<head>
+<style>
+{}
+</style>
+</head>
+
+<body>
+<!-- Side navigation -->
+<div class="sidenav">
+{}
+</div>
+
+<!-- Page content -->
+<div class="main">
+  {}
+</div>
+</body>
+</html>""".format(
+    HTML_CSS_STYLE,
+    "\n".join(links),
+    html)
         
     with open('report.html','w') as f:
-        f.write(html)
+        f.write(final)
 
 
         
