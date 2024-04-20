@@ -298,14 +298,20 @@ class Biodata:
 
         MINI_WINDOW_SIZE = 15
         dur = self.get_duration()
-        if dur>3*MINI_WINDOW_SIZE:
+        if dur>3*MINI_WINDOW_SIZE: 
+            # include smaller sample plots as well of the beginning, middle and end of the signal
             tranges.append( (0,MINI_WINDOW_SIZE) )
             hd = (dur/2) - .5*MINI_WINDOW_SIZE
             tranges.append( (hd, hd+MINI_WINDOW_SIZE) )
             tranges.append( (dur-MINI_WINDOW_SIZE,dur) )
         
         for trange in tranges:
-            f = self.plot(timerange=trange,show=False,markers=(trange!=None))
+            f = self.plot(
+                timerange=trange,
+                show=False,
+                markers=(trange!=None),
+                figsize=(12,7) if trange is None else (8,5)
+            )
             pic_IObytes = io.BytesIO()
             plt.savefig(pic_IObytes,  format='jpg')
             pic_IObytes.seek(0)

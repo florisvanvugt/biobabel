@@ -237,7 +237,7 @@ def html_report():
     """
 
     if len(sys.argv)<2:
-        print("Usage: bioreport <FILES>")
+        print("Usage: biohtml <FILES>")
         sys.exit(-1)
     
     infs = sys.argv[1:]
