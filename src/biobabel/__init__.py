@@ -1,4 +1,5 @@
 import biobabel.io
+from biobabel.io import load
 
 from biobabel import *
 
@@ -25,21 +26,13 @@ def get_file():
     Open the file, and then print a summary.
     """
     import os
-    from tkinter import filedialog as fd
 
     fname = None
     if len(sys.argv)>1:
         fname = sys.argv[1]
     else:
-
-        filetypes = biobabel.io.get_compatible_file_types()+[
-            ('All files', '*.*')
-            ]
-
-        fname = fd.askopenfilename(
-            title='Select your recording',
-            initialdir='.',
-            filetypes=filetypes)
+        fname = ask_bio_file()
+        
 
     if not fname:
         print("You need to select a file. Exiting now.")
@@ -54,6 +47,26 @@ def get_file():
     bio.meta['filename']=fname
     return bio
     
+
+
+def ask_bio_file():
+    """
+    Display a file selection dialogue to ask the user to select an input file.
+    """
+    from tkinter import filedialog as fd
+    
+    filetypes = biobabel.io.get_compatible_file_types()+[
+        ('All files', '*.*')
+        ]
+
+    fname = fd.askopenfilename(
+        title='Select your recording',
+        initialdir='.',
+        filetypes=filetypes)
+
+    return fname
+    
+
 
 
 
