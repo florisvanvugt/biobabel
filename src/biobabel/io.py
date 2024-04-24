@@ -62,6 +62,23 @@ def load(fname,dialect=None):
 
 
 
+def get_compatible_file_types():
+    """ Return a list of supported file types
+    that can be fed to the open file dialog."""
+    ftps = [
+        ('Biopac Acqknowledge (ACQ)','.acq'),
+        ('Extensible Data Format (XDF)','.xdf'),
+        ('HDPhysio5 (HDF5)','.hdf5'),
+        ('European Data Format (EDF)','.edf'),
+        ('Comma-separated values (CSV)','.csv'),
+        ('Text file (TXT)','.txt')
+        ]
+    return [
+        ('All biobabel compatible file types',' '.join([ ext for (_,ext) in ftps ]))
+        ]+ftps
+
+
+
 
 def guess_dialect(fname):
 

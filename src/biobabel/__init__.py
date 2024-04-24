@@ -1,4 +1,4 @@
-from biobabel.io import load
+import biobabel.io
 
 from biobabel import *
 
@@ -32,10 +32,9 @@ def get_file():
         fname = sys.argv[1]
     else:
 
-        filetypes = (
-            ('All files', '*.*'),
-            ('HDF5 dataset', '*.hdf5')
-        )
+        filetypes = biobabel.io.get_compatible_file_types()+[
+            ('All files', '*.*')
+            ]
 
         fname = fd.askopenfilename(
             title='Select your recording',
@@ -50,7 +49,7 @@ def get_file():
         print("File {} does not seem to exist. Exiting now.".format(fname))
         sys.exit(-1)
         
-    bio = load(fname)
+    bio = biobabel.io.load(fname)
     bio.print()
     bio.meta['filename']=fname
     return bio
@@ -176,7 +175,7 @@ def merge():
 
     inputs = []
     for inf in infs:
-        bio = load(inf)
+        bio = biobabel.io.load(inf)
         inputs.append(bio)
 
 
@@ -247,7 +246,7 @@ def html_report():
     for inf in infs:
         print()
         print("==> {}".format(inf))
-        bio = load(inf)
+        bio = biobabel.io.load(inf)
         h = bio.html_report()
         html += "<h1><a id=\"{}\">{}</a></h1><p>{}</p>".format(inf,inf,h)
 
