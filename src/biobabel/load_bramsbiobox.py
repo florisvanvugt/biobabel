@@ -33,14 +33,21 @@ def load(fname):
     ## gb['renames'] comes from the file configuration
     tab = pd.read_csv(fname,sep=',')
 
+    
     TIME_DIVIDER = 1000
 
+    # Find the time column
     tcol = 'Time(ms)'
     for col in tab.columns:
         if col.find(tcol)>-1:
             tcol = col
+
+    # An annoying glitch: in some cases the last line had time zero. Let's drop that if it's the case.
+    tab = tab[ tab[tcol]!=0 ]
+            
     tab[tcol]=tab[tcol]/TIME_DIVIDER  # express in s
 
+    
     tdur = max(tab[tcol])-min(tab[tcol])
     dt = np.diff(tab[tcol])
     mediandt=np.median(dt)
