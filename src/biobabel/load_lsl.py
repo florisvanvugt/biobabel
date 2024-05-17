@@ -30,6 +30,7 @@ def load(fname):
 
     # Determine the common time onset of signals, so that we can then crop to that. 
     ONSET_T, N_SAMP = get_onset(streams)
+    #print(ONSET_T,N_SAMP) # debug
 
     for s in streams:
         info = s['info']
@@ -40,10 +41,12 @@ def load(fname):
         modality = tp
         p = info['name'][0]
 
-        t_sel = s['time_stamps']>ONSET_T
+        t_sel = s['time_stamps']>=ONSET_T
         rawdata = s["time_series"].T[0][t_sel] # just take the first stream, and only after the common starting point
+        #print(rawdata.shape) # debug
         rawdata = rawdata[:N_SAMP] # take only the common chunk
         sz = rawdata.shape[0]
+        #print(sz) # debug
         assert sz==N_SAMP
 
         SR = float(info['nominal_srate'][0]) #info['effective_srate']
