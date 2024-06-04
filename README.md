@@ -12,6 +12,14 @@ Many different file formats exist for physiology signals such as cardiac (ECG, P
 python3 -m pip install biobabel
 ```
 
+Install latest development version from Github:
+
+```
+python -m pip install --upgrade "biobabel @ git+https://github.com/florisvanvugt/biobabel"
+```
+
+
+
 # Usage
 
 
@@ -100,11 +108,6 @@ Currently supported dialects are:
 
 # Development
 
-Install latest development version from Github:
-
-```
-python -m pip install --upgrade "biobabel @ git+https://github.com/florisvanvugt/biobabel"
-```
 
 
 Install locally:

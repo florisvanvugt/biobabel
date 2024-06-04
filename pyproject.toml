@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "biobabel"
-version = "1.0.4"
+dynamic = ["version"]
 authors = [
   { name="Floris van Vugt", email="ftvanvugt@gmail.com" },
 ]
@@ -19,6 +19,9 @@ classifiers = [
 dependencies = [
   "h5py","numpy","pyxdf","matplotlib","bioread","opensignalsreader","pandas","pyedflib","scipy"
 ]
+
+[tool.setuptools.dynamic]
+version = {attr = "biobabel.__version__"}
 
 [project.optional-dependencies]
 BDF = ["pybdf" ]
