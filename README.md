@@ -28,13 +28,9 @@ https://biobabel.readthedocs.io/
 
 
 
-
-# Requirements
-
-
 # Physiology dialects
 
-Currently supported dialects are:
+Currently supported dialects for reading are:
 * EDF through [PyEDFlib](https://pyedflib.readthedocs.io/en/latest/)
 * labstreaminglayer (LSL) XDF (alpha) thanks to [pyxdf](https://pypi.org/project/pyxdf/)
 * BioPAC Acknowledge (acq) thanks to [bioread](https://pypi.org/project/bioread/)
