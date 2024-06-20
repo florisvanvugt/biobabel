@@ -10,7 +10,7 @@ To use Biobabel, first install it using pip:
 
 .. code-block:: console
 
-   (.venv) $ pip install biobabel
+   $ pip install biobabel
 
 
 Or you can install the latest development version directly from Github:
@@ -20,7 +20,7 @@ Or you can install the latest development version directly from Github:
    $ python -m pip install --upgrade "biobabel @ git+https://github.com/florisvanvugt/biobabel"
 
 
-
+In both cases, omit the dollar sign when you copy-paste this into the terminal.
 
 
 
