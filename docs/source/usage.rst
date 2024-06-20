@@ -39,9 +39,6 @@ Example:
 		  
 This loads the data into an object of the :ref:`biodata` class, the core of the Biobabel logic.
 
-.. autoclass:: biobabel.Biodata
-   :no-index:
-
    
 	       
 
