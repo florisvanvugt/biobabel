@@ -22,3 +22,14 @@ Or you can install the latest development version directly from Github:
 
 
 
+
+
+Basic usage
+-----------
+
+You would typically start by loading a physiology data file using the ``biobabel.load()`` function:
+
+.. autofunction:: biobabel.load
+
+
+   
