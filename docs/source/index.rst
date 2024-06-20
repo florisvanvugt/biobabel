@@ -18,5 +18,6 @@ Contents
 .. toctree::
 
    usage
+   cli
    biodata
    api

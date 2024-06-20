@@ -46,12 +46,16 @@ class Biodata:
         """ 
         Add metadata.
 
-        k : the metadata key 
-        v : the metadata value
-        replace : if true, replace any existing metadata key value, otherwise add a new key
+        :param k: str, the metadata key 
+        :param v: str, the metadata value
+        :param replace: bool, if `True`, replace any existing metadata key value, otherwise add a new key
 
         Example:
-        biodata.add_meta('date','2024-03-22')
+
+        .. code-block:: python
+
+           biodata.add_meta('date','2024-03-22')
+
         """
         kk = k
         if not replace:
@@ -64,7 +68,9 @@ class Biodata:
         Return a channel id that is unique (does not exist yet), 
         as close as possible to the given id.
 
-        ident : the id to start from
+        :param ident: str, the id to start from
+        :return: a channel id that does not exist yet
+        :rtype: str
 
         If ident is already unique, it will be returned.
         """
@@ -81,10 +87,10 @@ class Biodata:
     
     def add_channel(self,hdrdat):
         """ 
-        Add the channel with specified header information and data.
+        Create a new channel with specified header information and data.
 
-        hdrdat : is a tuple (hdr,dat) where hdr is a dict containing the
-        header and dat is the data stream itself (a one-dimensional array).
+        :param hdrdat: is a tuple (hdr,dat) where hdr is a dict containing the header and dat is the data stream itself (a one-dimensional array).
+
         """
         hdr,dat   = hdrdat
         newid     = hdr['id'].replace('/','_') # slashes don't work because HDF5 gets confused
@@ -93,14 +99,38 @@ class Biodata:
 
 
     def find(self,crit={}):
-        """ Find all channels that satisfy the metadata criteria and return them as (hdr,dat) """
+        """ 
+        Find all channels that satisfy the metadata criteria and return them as (hdr,dat) 
+
+        :param crit: a dictionary containing key-value pairs for searching the channels.
+        :returns: the channels (hdr,dat) satisfying the search criteria.
+
+        Example:
+
+        .. code-block:: python
+
+           biodata.find({'modality':'ecg'}) # will return all channels where modality equals ecg
+
+        """
         return [ self.get(ch) for ch in self.find_channels(crit) ]
             
             
         
         
     def find_channels(self,crit={}):
-        """ Find the channel id's satisfying certain criteria """
+        """ 
+        Find the channel id's satisfying certain criteria.
+
+        :param crit: a dictionary containing key-value pairs for searching the channels.
+        :returns: the channel IDs satisfying the search criteria.
+        :rtype: str list
+
+        Example:
+
+        .. code-block:: python
+
+           biodata.find_channels({'modality':'ecg'}) # will return all channel IDs for channels whose modality equals ecg
+        """
         chans = []
         for hdr,_ in self.channels:
             ok = True
@@ -113,7 +143,12 @@ class Biodata:
 
 
     def get_participants(self):
-        """ Return a list of participants in the current object """
+        """ 
+        Return a list of participants in the current object 
+
+        :returns: a list of participant IDs
+        :rtype: str list
+        """
         part = []
         for hdr,_ in self.channels:
             p= hdr.get('participant',None)
@@ -123,7 +158,12 @@ class Biodata:
         return part
 
     def get(self,chid):
-        """ Get a particular channel data """
+        """ 
+        Get a particular channel data 
+        
+        :param chid: str, the channel ID
+        :returns: (hdr,dat) tuple containing the header and data for the given channel, respectively.
+        """
         for hdr,dat in self.channels:
             if hdr.get('id',None)==chid:
                 return hdr,dat
@@ -131,13 +171,27 @@ class Biodata:
         return None,None
 
     def get_time(self,chid):
-        # Given a channel, reproduce a time vector
+        """
+        Given a channel, reproduce a time vector
+
+        :param chid: str, the channel ID
+        :returns: a list of timestamps of the same length as the data, starting at zero.
+        :rtype: numpy.array of floats
+
+        """
         hdr,dat = self.get(chid)
         t = np.arange(dat.shape[0])/hdr['sampling_frequency']
         return t
 
     def get_closest_sample(self,chid,t):
-        """ Find the sample closest in time to the point t """
+        """
+        Find the sample closest in time to the point t.
+
+        :param chid: str, the channel ID
+        :param t: float, the time point to which we want to find the closest sample.
+        :returns: the sample index closest to the given time value
+        :rtype: int
+        """
         hdr,dat = self.get(chid)
         idx = round( t * hdr['sampling_frequency'] )
         if idx<0: return 0
@@ -146,7 +200,14 @@ class Biodata:
 
     
     def get_duration(self,chid=None):
-        """ Get the duration of a channel in seconds """
+        """ 
+        Get the duration of a channel in seconds 
+        
+        :param chid: str, the channel ID
+        :returns: the duration in seconds
+        :rtype: float
+
+        """
         if chid==None: # If no channel is given, return maximum duration of all channels
             chids = self.find_channels()
             d = [ self.get_duration(c) for c in chids ]
@@ -161,7 +222,13 @@ class Biodata:
 
     
     def summary(self):
-        """ Return a summary of the current data (in str format) """
+        """ 
+        Return a human-readable summary of the current data (in str format).
+
+        :return: summary
+        :rtype: str
+
+        """
         ret = "Summary of {}\n".format(self.name)
         ret += self.summarize_meta()+"\n"
         if self.date and 'date' not in self.meta:
@@ -186,7 +253,14 @@ class Biodata:
 
 
     def summarize_channel(self,chid):
-        """ Return a string summary of the channel indicated by the given id. """
+        """ 
+        Return a human-readable summary of the channel indicated by the given id. 
+
+        :param chid: str, channel id
+        :return: summary of the channel
+        :rtype: str
+
+        """
         hdr,dat  = self.get(chid)
         SR       = hdr['sampling_frequency']
         nsamp    = dat.shape[0]
@@ -207,6 +281,7 @@ class Biodata:
 
 
     def print(self):
+        """ Print a human readable summary of the data contained."""
         summ = self.summary()
         print(summ)
 
@@ -217,11 +292,11 @@ class Biodata:
         Produce a simple inspection plot of the entirety of the data. 
         The channels argument can indicate a channel or a list of channels to be plotted.
 
-        channels  : the channel ids for the data you want to plot
-        figsize   : the desired figure size in inches (as specified by matplotlib)
-        timerange : a tuple indicating the start and end times of the desired plot time range, or None to plt all
-        show      : whether to call plot.show() or not when completed
-        markers   : whether to draw tempoeral position of embedded markers
+        :param channels: list of str, the channel ids for the data you want to plot
+        :param figsize: the desired figure size in inches (as specified by matplotlib)
+        :param timerange: a tuple indicating the start and end times of the desired plot time range, or None to plt all
+        :param show: bool,  whether to call plot.show() or not when completed
+        :param markers: whether to draw tempoeral position of embedded markers
         
         """
 
@@ -287,7 +362,12 @@ class Biodata:
 
 
     def html_report(self):
-        """ Return a simple quick-and-dirty HTML rendition of the data """
+        """ 
+        Return a simple quick-and-dirty HTML rendition of the data.
+
+        :return: standalone HTML code containing base64-encoded images
+        :rtype: str
+        """
         import base64
         import io
         import matplotlib.pyplot as plt
@@ -331,6 +411,13 @@ class Biodata:
     # Make changes
     
     def rename(self,old_id,new_id):
+        """
+        Rename channels
+
+        :param old_id: str, the current channel ID
+        :param new_id: str, the desired new channel ID.
+        
+        """
         for hdr,_ in self.channels:
             if hdr['id']==old_id:
                 hdr['id']=new_id
@@ -341,7 +428,15 @@ class Biodata:
 
 
     def update_channel(self,ident,specs):
-        """ Update the header of a particular channel. """
+        """ 
+        Update the header of a particular channel. 
+        
+        :param ident: str, the channel ID to be modified
+        :param specs: dict, a list of key-values that should be changed in the meta data.
+
+        Any existing metadata will be overwritten.
+
+        """
         for hdr,_ in self.channels:
             if hdr['id']==ident:
                 for k in specs:
@@ -353,7 +448,19 @@ class Biodata:
         
 
     def crop(self,tfrom=None,tend=None):
-        """ Crop a number of seconds from the beginning or end of all channels. """
+        """ 
+        Crop the data to a given time range.
+
+        :param tfrom: float, number of seconds that should be clipped from the beginning of the data streams
+        :param tend: float, the end point to which all data should be clipped.
+
+        Example:
+
+        .. code-block:: python
+
+           biodata.clip(5,12) # will clip all data before 5 seconds and after 12 seconds (yielding typically a 7 second data file)
+
+        """
         if tfrom==None and tend==None: return # otherwise it doesn't really make sense eh?
         if tfrom==None: tfrom=-np.Inf
         if tend==None: tend=np.Inf
@@ -375,7 +482,11 @@ class Biodata:
 
 
     def drop(self,what):
-        """ Drop channels. Provide an ID or a list of IDs for the channels to be dropped. """
+        """ 
+        Drop channels. 
+        
+        :param what: str or list of str, an ID or a list of IDs for the channels to be dropped. 
+        """
 
         if isinstance(what,str):
             # Assume that this is the ID of the channel we want to drop so drop it
@@ -390,8 +501,18 @@ class Biodata:
 
 
     def select(self,what):
-        """ Select only some channels and drop the others. 
-        Provide an ID or a list of IDs for the channels to be retained. """
+        """ 
+        Drop all but a select list of channels.
+
+        :param what: str or list of str, an ID or a list of IDs for the channels to be dropped. 
+
+        Example:
+
+        .. code-block:: python
+
+           biodata.select(['ecg','ppg']) # will drop all channels except `ecg` and `ppg`
+
+        """
 
         if isinstance(what,str):
             # Assume that this is the ID of the channel we want to drop so drop it
@@ -422,7 +543,9 @@ class Biodata:
             
 
     def copy(self):
-        """ Create a deep copy of oneself """
+        """ 
+        Create a deep copy of this data object.
+        """
         
         bio = Biodata() # create a new biodata object
 
@@ -446,22 +569,42 @@ class Biodata:
     # Marker functionality 
     
     def get_markers(self):
-        """ Returns a list of names of markers. """
+        """ 
+        Returns a list of names of markers. 
+
+        :return: list of marker names
+        :rtype: str list
+        """
         mrk= list(self.markers.keys())
         mrk.sort()
         return mrk
 
     def get_marker(self,m):
-        """ For a given marker, returns a list of time points stored under that marker. """
+        """ 
+        For a given marker, returns a list of time points stored under that marker. 
+        
+        :param m: str, the marker name
+        :returns: the list of time points indicated by that marker, in seconds.
+        :rtype: float list
+        """
         return self.markers.get(m,[])
 
     def add_marker(self,m,timepoints):
-        """ Add a marker with a given label m and set of time points """
+        """ 
+        Add a marker with a given label m and set of time points.
+
+        :param m: str, the name of the marker to be added
+        :param timepoints: float list, the time points (in seconds) indicated by this new marker. Or if only a single time point, can be entered as a single float.
+        """
         if isinstance(timepoints,float):
             timepoints = [timepoints]
+        if m in self.markers:
+            print("### ERROR, marker {} to be added already exists.".format(m))
+            assert False
         self.markers[m] = timepoints
 
     def clear_markers(self):
+        """ Remove all markers """
         self.markers = {}
     
 
@@ -479,7 +622,7 @@ class Biodata:
         """
         Merge data from another biodata object into the current object.
 
-        other : the object to be merged into the current object
+        :param other: Biodata, another object to be merged into the current object
         """
 
         # Copy metadata
@@ -510,7 +653,9 @@ class Biodata:
         """
         Save current data file in hdphysio5 format
 
-        fname : filename of the file to be created
+        :param fname: str, the filename of the file to be created.
+
+        At present, only saving in the native HDF5 is supported.
         """
 
         if not fname.lower().endswith('.hdf5'):

@@ -34,12 +34,21 @@ You would typically start by loading a physiology data file using the ``biobabel
 Example:
 
 >>> import biobabel as bb
->>> bb.load('tests/example.hdf5')
+>>> bio = bb.load('tests/example.hdf5')
 
 		  
 This loads the data into an object of the :ref:`biodata` class, the core of the Biobabel logic.
 
-   
+
+
+>>> bio.print()
+>>> bio.plot()
+>>> bio.save('tests/new_filename.hdf5')
+
+
+More complete overview of functionality in [Jupyter notebook](https://github.com/florisvanvugt/biobabel/blob/main/tests/Usage.ipynb).
+
+
 	       
 
    
