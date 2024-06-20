@@ -1,4 +1,4 @@
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 
 import biobabel.io
@@ -17,6 +17,7 @@ def info():
     """
     Display quick information about a given file.
     """
+  
     get_file()
 
 
@@ -79,6 +80,12 @@ def display(advanced=False):
     
     advanced : if True, show the advanced viewer (TK GUI) otherwise show a simple matplotlib 
     """
+
+    if len(sys.argv)>1:
+        val = sys.argv[1]
+        if val == "--version" or val=="-v":
+            print(__version__)
+            return
 
     bio = get_file()
 
