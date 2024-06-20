@@ -9,8 +9,10 @@ import time
 
 class Biodata:
     """ 
-    Represents a collection of streams of physiological data (channels)
+    This is the core object of the Biobabel logic.
+    This object represents a collection of streams of physiological data (channels)
     as well as some set of triggers (event markers).
+    We have methods to print() and display() the data.
     """
 
     

@@ -31,5 +31,11 @@ You would typically start by loading a physiology data file using the ``biobabel
 
 .. autofunction:: biobabel.load
 
+This loads the data into an object of the ``Biobabel`` class, the core of the Biobabel logic.
+
+.. autoclass:: Biobabel
+
+   
+	       
 
    
