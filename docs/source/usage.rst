@@ -31,9 +31,16 @@ You would typically start by loading a physiology data file using the ``biobabel
 
 .. autofunction:: biobabel.load
 
-This loads the data into an object of the ``Biobabel`` class, the core of the Biobabel logic.
+Example:
 
-.. autoclass:: Biobabel
+>>> import biobabel as bb
+>>> bb.load('tests/example.hdf5')
+
+		  
+This loads the data into an object of the :ref:`biodata` class, the core of the Biobabel logic.
+
+.. autoclass:: biobabel.Biodata
+   :no-index:
 
    
 	       
