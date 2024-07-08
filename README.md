@@ -34,7 +34,7 @@ Currently supported dialects for reading are:
 * EDF through [PyEDFlib](https://pyedflib.readthedocs.io/en/latest/)
 * labstreaminglayer (LSL) XDF (alpha) thanks to [pyxdf](https://pypi.org/project/pyxdf/)
 * BioPAC Acknowledge (acq) thanks to [bioread](https://pypi.org/project/bioread/)
-* opensignals ("OpenSignals (r)evolution" thanks to [opensignalsreader](https://github.com/PGomes92/opensignalsreader)
+* opensignals ("OpenSignals (r)evolution") thanks to [opensignalsreader](https://github.com/PGomes92/opensignalsreader)
 * Biosemi BDF thanks to [pybdf](https://pypi.org/project/pybdf/)
 * Generic CSV (where CSV delimiter is automatically inferred and the time column is guessed as well)
 * Brams-Bio-Box (in-house format, even though the Generic-CSV functionality should take care of this now)
