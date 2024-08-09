@@ -38,7 +38,7 @@ def load(fname):
             'id'                :ch.name,
             'participant'       :'participant',
             'sampling_frequency':ch.samples_per_second,
-            'modality'          :ch.name.split(' ')[0].lower(),
+            'modality'          :biobabel.guess_modality(ch.name),
             'units'             :ch.units
         }
         dat = ch.data

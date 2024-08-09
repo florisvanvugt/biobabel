@@ -40,7 +40,7 @@ def load(fname):
             'id'                :label,
             'participant'       :'participant',
             'sampling_frequency':SR,
-            'modality'          :label,
+            'modality'          :biobabel.guess_modality(label),
             'units'             :units
         }
         dat = acq.signal(ch)

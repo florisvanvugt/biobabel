@@ -39,7 +39,7 @@ def load(fname):
             'id'                :ch,
             'participant'       :'participant',
             'sampling_frequency':bdfRec.sampRate[i],
-            'modality'          :ch.lower(),
+            'modality'          :biobabel.guess_modality(ch),
             'units'             :ch.lower()
         }
         dat = rec['data'][i]

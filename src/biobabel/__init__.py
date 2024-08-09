@@ -308,3 +308,21 @@ def html_report():
 
 
         
+
+
+
+
+def guess_modality(s):
+    """ 
+    Guess modality from a channel label.
+    """
+    if s.lower().find('ecg')>-1:
+        return 'ecg'
+    if s.lower().find('ppg')>-1:
+        return 'ppg'
+    if s.lower().find('resp')>-1:
+        return 'resp'
+    if s.lower().find('eda')>-1:
+        return 'eda'
+    return 'unknown'
+
