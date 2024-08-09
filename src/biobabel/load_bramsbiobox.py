@@ -74,7 +74,7 @@ def load(fname):
             'id'                :col,
             'participant'       :participant,
             'sampling_frequency':SR,
-            'modality'          :nm,
+            'modality'          :biobabel.guess_modality(nm),
             'units'             :'V'}
         data = 3.3 * (np.array(tab[col]) / 1023) # express values as Voltage
         bio.add_channel((hdr,data))

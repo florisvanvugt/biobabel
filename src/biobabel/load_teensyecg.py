@@ -87,7 +87,7 @@ def load(fname):
             'id'                :chan,
             'participant'       :'participant',
             'sampling_frequency':SR,
-            'modality'          :chan,
+            'modality'          :guess_modality(chan),
             'units'             :'a.u'
         }
         dat = [ d[chan] for d in alldata ]
