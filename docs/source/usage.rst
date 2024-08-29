@@ -14,7 +14,7 @@ To use Biobabel, first install it using pip:
 
 
 Or you can install the latest development version directly from Github:
-   
+
 .. code-block:: console
 
    $ python -m pip install --upgrade "biobabel @ git+https://github.com/florisvanvugt/biobabel"
@@ -36,7 +36,7 @@ Example:
 >>> import biobabel as bb
 >>> bio = bb.load('tests/example.hdf5')
 
-		  
+
 This loads the data into an object of the :ref:`biodata` class, the core of the Biobabel logic.
 
 
@@ -46,9 +46,9 @@ This loads the data into an object of the :ref:`biodata` class, the core of the 
 >>> bio.save('tests/new_filename.hdf5')
 
 
-More complete overview of functionality in [Jupyter notebook](https://github.com/florisvanvugt/biobabel/blob/main/tests/Usage.ipynb).
+More complete overview of functionality in `Jupyter notebook <https://github.com/florisvanvugt/biobabel/blob/main/tests/Usage.ipynb>`_.
 
 
-	       
 
-   
+
+
