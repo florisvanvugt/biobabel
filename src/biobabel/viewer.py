@@ -163,8 +163,8 @@ def load_channels(chans):
     gb['n.signals']= len(chans)
 
     gb['data'] = {}
-    gb['tmin']=np.Inf
-    gb['tmax']=-np.Inf
+    gb['tmin']=np.inf
+    gb['tmax']=-np.inf
     for c in chans:
         hdr,vals = bio.get(c)
         t = bio.get_time(c)
