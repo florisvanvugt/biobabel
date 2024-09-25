@@ -327,7 +327,7 @@ class Biodata:
             ax = axs[i][0]
             hdr,vals = self.get(chan)
             t = self.get_time(chan)
-            tmin,tmax = -np.Inf,np.Inf
+            tmin,tmax = -np.inf,np.inf
             if timerange:
                 (tmin,tmax) = timerange
             tsels = (t>=tmin) & (t<=tmax)
@@ -462,8 +462,8 @@ class Biodata:
 
         """
         if tfrom==None and tend==None: return # otherwise it doesn't really make sense eh?
-        if tfrom==None: tfrom=-np.Inf
-        if tend==None: tend=np.Inf
+        if tfrom==None: tfrom=-np.inf
+        if tend==None: tend=np.inf
         newchannels = []
         for hdr,vals in self.channels:
             chan = hdr['id']
