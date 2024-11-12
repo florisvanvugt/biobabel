@@ -1,4 +1,4 @@
-__version__ = '1.0.6'
+__version__ = '1.0.7'
 
 
 import biobabel.io
@@ -12,28 +12,37 @@ DATEFORMAT = "%Y/%m/%d %H:%M:%S %Z%z"
 
 import sys
 
+import argparse
+
+
 
 def info():
     """
     Display quick information about a given file.
     """
   
-    get_file()
+    get_file('Display basic information about a physiology file.')
 
 
-def get_file():
+def get_file(descr=''):
     """
     Figure out which file wants to be opened.
     First check the command line if a file was indicated.
     If not, show a file selection dialog window to allow
     the user to select one.
     Open the file, and then print a summary.
+
+    descr : A description of the purpose of the script for which this is done.
     """
     import os
 
-    fname = None
-    if len(sys.argv)>1:
-        fname = sys.argv[1]
+    parser = argparse.ArgumentParser(description=descr)
+    parser.add_argument("filename", nargs="?", help="The file to open. If no file is provided, a window will open to ask you to select a filename.")
+    parser.add_argument('-v','--version', action='version', version='%(prog)s {version}'.format(version=__version__))
+    args = parser.parse_args()
+
+    if args.filename:
+        fname = args.filename
     else:
         fname = ask_bio_file()
         
@@ -81,13 +90,7 @@ def display(advanced=False):
     advanced : if True, show the advanced viewer (TK GUI) otherwise show a simple matplotlib 
     """
 
-    if len(sys.argv)>1:
-        val = sys.argv[1]
-        if val == "--version" or val=="-v":
-            print(__version__)
-            return
-
-    bio = get_file()
+    bio = get_file("Produce a quick plot of the contents of a physiology file.")
 
     if advanced:
         import biobabel.viewer as viewer
@@ -123,8 +126,10 @@ def guess_modality(nm):
 
 
 def tohdf5():
-    """ Split a file according to its markers """
-    bio = get_file() # attempt to get a file name to work on
+    """
+    Convert a file to the biobabel native HDF5 format.
+    """
+    bio = get_file('Convert a file to the biobabel-native HDF5 format.') # attempt to get a file name to work on
     fname = bio.meta['filename']
     import os
     fbase,ext = os.path.splitext(fname)
@@ -135,8 +140,12 @@ def tohdf5():
 
 
 def split():
-    """ Split a file according to its markers """
-    bio = get_file() # attempt to get a file name to work on
+    """
+    Split a file according to its markers.
+    That is, given a file with several channels and markers, produce a set of files that each contain
+    the portion of signal between subsequent markers.
+    """
+    bio = get_file('Split file into smaller files along time markers.') # attempt to get a file name to work on
     # If we're still here that means we have loaded a file
 
     # Extract all the markers, throw them on a big heap
@@ -185,13 +194,23 @@ def merge():
     This assumes data from the channels in the input files are all synchronous.
     """
 
-    if len(sys.argv)<3:
-        print("Usage: biomerge <FILE1> <FILE2> ... <OUTPUT_FILE>")
-        print("Need at least two input files")
-        sys.exit(-1)
+    parser = argparse.ArgumentParser(description='Merge a series of physiology files by concatenating them in time.')
+    parser.add_argument("infile", nargs="+", help="The files to include in the merge.")
+    parser.add_argument("outfile", help="The output file name.")
+    parser.add_argument('-v','--version', action='version', version='%(prog)s {version}'.format(version=__version__))
+    args = parser.parse_args()
 
-    outf = sys.argv[-1]
-    infs = sys.argv[1:-1]
+    if not args.outfile:
+        print("You need to supply an output file name.")
+        sys.exit(-1)
+    else:
+        outf = args.outfile
+
+    if not args.infile:
+        print("You need to supply at least one input file.")
+        sys.exit(-1)
+    else:
+        infs = args.infile
 
     print("Input files: {}".format(",".join(infs)))
     print("Output file: {}".format(outf))
@@ -199,7 +218,10 @@ def merge():
     inputs = []
     for inf in infs:
         bio = biobabel.io.load(inf)
-        inputs.append(bio)
+        if bio:
+            inputs.append(bio)
+        else:
+            sys.exit(-1)
 
 
     merged = Biodata() # create a new object
@@ -255,14 +277,18 @@ HTML_CSS_STYLE = """
 
 def html_report():
     """
-    Create an easy report of a whole series of files at once.
+    Create an user friendly report giving an overview of a whole series of physiology files at once.
     """
 
-    if len(sys.argv)<2:
-        print("Usage: biohtml <FILES>")
+    parser = argparse.ArgumentParser(description='Produce a quick overview of a range of physiology files.')
+    parser.add_argument("filename", nargs="+", help="The files to include in the report.")
+    parser.add_argument('-v','--version', action='version', version='%(prog)s {version}'.format(version=__version__))
+    args = parser.parse_args()
+
+    if not args.filename:
         sys.exit(-1)
-    
-    infs = sys.argv[1:]
+
+    infs = args.filename
     print("Input files: {}".format(",".join(infs)))
 
     html = ""
@@ -270,8 +296,11 @@ def html_report():
         print()
         print("==> {}".format(inf))
         bio = biobabel.io.load(inf)
-        h = bio.html_report()
-        html += "<h1><a id=\"{}\">{}</a></h1><p>{}</p>".format(inf,inf,h)
+        if bio:
+            h = bio.html_report()
+            html += "<h1><a id=\"{}\">{}</a></h1><p>{}</p>".format(inf,inf,h)
+        else:
+            sys.exit(-1)
 
 
     ## Add header
@@ -302,9 +331,12 @@ def html_report():
     HTML_CSS_STYLE,
     "\n".join(links),
     html)
-        
-    with open('report.html','w') as f:
+
+    outf = 'report.html'
+    with open(outf,'w') as f:
         f.write(final)
+
+    print("Report written to {}".format(outf))
 
 
         
