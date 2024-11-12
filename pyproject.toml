@@ -24,8 +24,8 @@ dependencies = [
 version = {attr = "biobabel.__version__"}
 
 [project.optional-dependencies]
-BDF = ["pybdf" ]
-# pyBDF seemed problematic under Anaconda, so it is made optional
+BDF = ["pybdf" ] # pyBDF seemed problematic under Anaconda, so it is made optional
+NEUROKIT = ["neurokit2" ] # used in the example usage only for illustration purposes
 
 [project.scripts]
 # Command line interface entrypoint scripts
