@@ -2,6 +2,9 @@
 
 # Biobabel : a unified interface for reading a plethora of physiology file formats
 
+[![DOI](https://zenodo.org/badge/660740111.svg)](https://zenodo.org/badge/latestdoi/660740111)
+
+
 Many different file formats exist for physiology signals such as cardiac (ECG, PPG) or respiratory data. Many packages exist in Python to read these formats but they load into different data structures. This package is a wrapper of sorts for already existing tools providing a unified easy-to-use interface.
 
 
@@ -58,3 +61,11 @@ pip install -e .
 ```
 
 
+
+# Citation
+
+Please cite this work if you use it:
+
+  * van Vugt, F.T. (2025). Biobabel: Python package for reading major bio/physiology data formats. https://doi.org/10.5281/zenodo.15453402
+  
+Thank you!
