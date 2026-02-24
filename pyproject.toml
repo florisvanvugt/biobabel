@@ -40,6 +40,19 @@ tohdf5   = "biobabel:tohdf5"
 [project.urls]
 "Homepage" = "https://github.com/florisvanvugt/biobabel"
 
+[tool.pytest.ini_options]
+addopts = [
+    "-ra", # show extra info on all failures
+    #"-q",  # less verbose output
+]
+testpaths = [
+    "tests",
+]
+pythonpath = [
+    ".",
+]
+minversion = "6.0"
+
 
 
 # To upload a package to PyPI:

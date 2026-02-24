@@ -61,6 +61,15 @@ pip install -e .
 ```
 
 
+# Testing
+
+To run the included tests, simply install the package and then run the following command from the root:
+
+```
+pytest
+```
+
+
 
 # Citation
 
