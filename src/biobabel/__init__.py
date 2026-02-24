@@ -4,7 +4,7 @@ __version__ = '1.0.7'
 import biobabel.io
 from biobabel.io import load
 
-from biobabel import *
+#from biobabel import * # lint doesn't like this - perhaps we can work without it.
 
 from biobabel.biodata import Biodata
 

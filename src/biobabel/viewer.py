@@ -37,6 +37,8 @@ gb = {}
 
 def check_window_zoom(t):
 
+    PEAK_EDIT_MAX_WINDOW_T=.5 # smaller than this doesn't make sense for ECG data.
+    
     if gb['WINDOW_T']>PEAK_EDIT_MAX_WINDOW_T:
 
         # First zoom in
