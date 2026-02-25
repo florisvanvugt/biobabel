@@ -42,10 +42,10 @@ bio.add_channel((hdr,ppg))
 bio.add_marker('bingo',[3,3.8,4.5])
 
 
-bio.save('example.hdf5')
+bio.save('samples/example.hdf5')
 
 
-dat = bb.load('example.hdf5')
+dat = bb.load('samples/example.hdf5')
 dat.print()
 dat.plot()
 #dat.save('example2.hdf5')

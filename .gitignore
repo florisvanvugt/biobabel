@@ -3,3 +3,4 @@ dist
 src/biobabel/__pycache__/
 src/biobabel.egg-info/
 tests/__pycache__/
+examples/.ipynb_checkpoints/
