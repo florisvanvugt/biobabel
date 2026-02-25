@@ -1,5 +1,3 @@
-
-
 # Input data from our own flavour of HDF5-dataset
 
 import h5py
@@ -11,25 +9,24 @@ import os
 import datetime
 
 
-
 def load(fname):
 
-    bio = biobabel.Biodata() # create a new biodata object
+    bio = biobabel.Biodata()  # create a new biodata object
 
-    hf = h5py.File(fname,'r')
+    hf = h5py.File(fname, "r")
 
-    if 'name' in hf.attrs:
-        bio.name = hf.attrs['name']
+    if "name" in hf.attrs:
+        bio.name = hf.attrs["name"]
     else:
         bio.name = fname
-    
-    if 'date' in hf.attrs:
-        bio.date = hf.attrs['date']    
 
-    if 'participants' not in hf.attrs:
+    if "date" in hf.attrs:
+        bio.date = hf.attrs["date"]
+
+    if "participants" not in hf.attrs:
         print("# Error, missing participants attribute in the root.")
-        
-    participants = hf.attrs['participants']
+
+    participants = hf.attrs["participants"]
 
     # Check if the channel names are already unique
     names = []
@@ -40,29 +37,33 @@ def load(fname):
                 uniquenames = False
             else:
                 names.append(ch)
-            
+
     for p in participants:
         for ch in hf[p].keys():
-            nm = "{}/{}".format(p,ch) if not uniquenames else ch
+            nm = "{}/{}".format(p, ch) if not uniquenames else ch
             dset = hf[p][ch]
-            SR = dset.attrs['SR']
-            mod = dset.attrs['modality']
-            hdr = {'id'                :nm,
-                   'participant'       :p,
-                   'sampling_frequency':SR,
-                   'modality'          :mod}
-            dat = np.array(dset[:]) # convert into numpy array just to be sure
-            bio.add_channel((hdr,dat))
-            
-    bio.markers = {}
-    for m in hf.attrs.get('markers',[]):
-        bio.markers[m] = hf.attrs[m][:] # get the markers in question, make a copy
+            SR = dset.attrs["SR"]
+            mod = dset.attrs["modality"]
+            hdr = {
+                "id": nm,
+                "participant": p,
+                "sampling_frequency": SR,
+                "modality": mod,
+            }
+            dat = np.array(dset[:])  # convert into numpy array just to be sure
+            bio.add_channel((hdr, dat))
 
-    if 'meta' in hf: # if we have a meta dataset (should be empty but we use it to carry the attributes)
-        #print("Scavenge meta")
-        m = hf['meta']
+    bio.markers = {}
+    for m in hf.attrs.get("markers", []):
+        bio.markers[m] = hf.attrs[m][:]  # get the markers in question, make a copy
+
+    if (
+        "meta" in hf
+    ):  # if we have a meta dataset (should be empty but we use it to carry the attributes)
+        # print("Scavenge meta")
+        m = hf["meta"]
         for k in m.attrs:
-            #print("Add {}".format(k))
-            bio.add_meta(k,m.attrs[k])
+            # print("Add {}".format(k))
+            bio.add_meta(k, m.attrs[k])
 
     return bio
