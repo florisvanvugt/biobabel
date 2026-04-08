@@ -72,7 +72,7 @@ pytest
 
 # Support
 
-If you have a question or would like to contribute, please see the [CONTRIBUTING.md](Contributing to biobabel) section.
+If you have a question or would like to contribute, please see the [Contributing to biobabel](CONTRIBUTING.md) section.
 
 
 
