@@ -63,3 +63,5 @@ minversion = "6.0"
 #   python3 -m twine upload dist/*
 
 
+# Documentation: readthedocs should be automatically updated when I commit on github.
+
