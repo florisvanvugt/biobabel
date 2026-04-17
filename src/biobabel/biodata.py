@@ -410,7 +410,9 @@ class Biodata:
 
         :param ident: str, the channel ID to be modified
         :param specs: dict, a list of key-values that should be changed in the meta data.
-
+        
+        For example, update_channel('b_ecg',{'modality':'eeg'}) will set the modality of the channel with ID 'b_ecg' (assuming it exists) to 'eeg', overriding any prior value.
+        
         Any existing metadata will be overwritten.
 
         """
