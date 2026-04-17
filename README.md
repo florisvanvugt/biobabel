@@ -1,6 +1,6 @@
 
 
-# Biobabel : a unified interface for reading a plethora of physiology file formats
+# Biobabel : a unified interface for reading diverse physiology file formats
 
 [![DOI](https://zenodo.org/badge/660740111.svg)](https://zenodo.org/badge/latestdoi/660740111)
 
@@ -46,7 +46,7 @@ Currently supported dialects for reading are:
 
 
 
-# Development
+# Development version
 
 Install locally:
 
