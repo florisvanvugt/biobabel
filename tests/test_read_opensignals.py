@@ -1,5 +1,4 @@
 import pytest
-import requests
 import biobabel as bb
 
 
