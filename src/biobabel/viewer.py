@@ -375,7 +375,12 @@ def redraw():
         if not AUTOSCALE:
 
             ## Remove the "invalid" portions of the signal too
-            mn, mx = np.min(y), np.max(y)
+            if not len(y):
+                continue
+            
+            mn, mx = np.nanmin(y), np.nanmax(y)
+            if np.isnan(mn) or np.isnan(mx):
+                continue # don't set the scales if there are no non-NA data in the range
 
             # add some padding on the sides
             pad = 0.025 * (mx - mn)  # +.0001
