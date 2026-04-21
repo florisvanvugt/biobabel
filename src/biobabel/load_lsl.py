@@ -31,31 +31,28 @@ def load(fname):
 
     # Determine the common time onset of signals, so that we can then crop to that.
     ONSET_T, OFFSET_T = get_onset_offset(streams)
-    # print(ONSET_T,N_SAMP) # debug
 
     for s in streams:
         info = s["info"] # Fetch metadata about this stream
         stream_name = stringify(info["name"])
         stream_type = stringify(info["type"]).lower()
+        
+        #print("Reading stream {} {}".format(stream_name,stream_type))
         dtype = stringify(info['channel_format'])
         if dtype=='string':
             continue # work with strings later # TODO
 
-        print(" {} {}".format(stream_name,stream_type))
         modality = biobabel.guess_modality(stream_type)
         
-        p = stream_name
-        
         # Find out which time stamps are within the time range
-        rawdata = s["time_series"].T[0]#[
-        #t_sel
-        #]  # just take the first stream # TODO: This could be expanded to extract multiple streams
+        rawdata = s["time_series"].T[0]
+        # just take the first stream # TODO: This could be expanded to extract multiple streams
         timestamps = s['time_stamps']
 
         SR = info['effective_srate'] # take the effective sampling rate since the nominal can be off or even zero
         
         # Use interpolation to get a regular sampled grid determined by the effective sampling rate
-        target_t = np.arange(ONSET_T,OFFSET_T,1/SR)
+        target_t = np.arange(ONSET_T,np.max(timestamps),1/SR)
         f = interp1d(timestamps, rawdata, kind='nearest', bounds_error = False, fill_value=np.nan)
         signal_interp = f(target_t)
         
