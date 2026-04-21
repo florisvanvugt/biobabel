@@ -80,6 +80,6 @@ If you have a question or would like to contribute, please see the [Contributing
 
 Please cite this work if you use it:
 
-  * van Vugt, F.T. (2025). Biobabel: Python package for reading major bio/physiology data formats. https://doi.org/10.5281/zenodo.15453402
+  * van Vugt, F.T. (2026). Biobabel: Python package for reading major bio/physiology data formats. https://doi.org/10.5281/zenodo.19686009
   
 Thank you!

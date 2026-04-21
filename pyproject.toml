@@ -56,6 +56,7 @@ minversion = "6.0"
 
 
 # To upload a package to PyPI:
+#   python3 -m pip install build
 # Sitting in the package root directory
 #   python3 -m build
 # creates dist/... stuff
